@@ -4,7 +4,6 @@ pub mod state;
 pub mod errors;
 
 use state::*;
-use errors::*;
 
 declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
 
@@ -168,6 +167,9 @@ pub struct UpdateVerificationStatus<'info> {
     )]
     pub identity_account: Account<'info, IdentityAccount>,
 
+    #[account(
+        constraint = oracle.key() == config.verification_oracle @ errors::IdentityError::UnauthorizedOracle
+    )]
     pub oracle: Signer<'info>,
 
     #[account(seeds = [b"config"], bump)]
@@ -183,6 +185,9 @@ pub struct UpdateReputation<'info> {
     )]
     pub identity_account: Account<'info, IdentityAccount>,
 
+    #[account(
+        constraint = reputation_engine.key() == config.reputation_engine @ errors::IdentityError::UnauthorizedReputationEngine
+    )]
     pub reputation_engine: Signer<'info>,
 
     #[account(seeds = [b"config"], bump)]

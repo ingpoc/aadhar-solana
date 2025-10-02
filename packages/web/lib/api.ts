@@ -11,17 +11,17 @@ export const api = axios.create({
 
 export const identityApi = {
   create: (data: {
-    userId: string;
-    solanaPublicKey: string;
+    publicKey: string;
     did: string;
-    phoneNumber: string;
+    metadataUri?: string;
+    recoveryKeys?: string[];
   }) => api.post('/identity', data),
 
   getById: (id: string) => api.get(`/identity/${id}`),
 
   update: (id: string, data: Partial<{
-    phoneNumber: string;
-    emailVerified: boolean;
+    metadataUri?: string;
+    recoveryKeys?: string[];
   }>) => api.put(`/identity/${id}`, data),
 };
 

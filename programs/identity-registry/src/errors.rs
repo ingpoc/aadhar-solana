@@ -22,4 +22,10 @@ pub enum IdentityError {
 
     #[msg("Account not found")]
     AccountNotFound,
+
+    #[msg("Unauthorized oracle - oracle signer does not match config")]
+    UnauthorizedOracle,
+
+    #[msg("Unauthorized reputation engine - signer does not match config")]
+    UnauthorizedReputationEngine,
 }

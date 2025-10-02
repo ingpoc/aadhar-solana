@@ -142,3 +142,4 @@ public/uploads/
 *.min.css
 packages/web/.next/
 .env.example
+*-wallet.json
