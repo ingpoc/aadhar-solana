@@ -1,0 +1,22 @@
+{
+  "name": "aadhaarchain",
+  "version": "1.0.0",
+  "description": "Self-sovereign identity platform bridging India's government-grade identity verification with decentralized ownership",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "programs/*"
+  ],
+  "scripts": {
+    "build": "yarn workspaces run build",
+    "test": "yarn workspaces run test",
+    "dev": "yarn workspaces run dev",
+    "anchor:build": "cd programs && anchor build",
+    "anchor:test": "cd programs && anchor test",
+    "anchor:deploy": "cd programs && anchor deploy"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

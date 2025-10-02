@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String?  @unique
+  phone     String?  @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  status    String   @default("active")
+
+  identities Identity[]
+
+  @@map("users")
+}
+
+model Identity {
+  id                 String   @id @default(uuid())
+  userId             String   @map("user_id")
+  solanaPublicKey    String   @unique @map("solana_public_key")
+  did                String   @unique
+  verificationBitmap BigInt   @default(0) @map("verification_bitmap")
+  reputationScore    Int      @default(500) @map("reputation_score")
+  stakedAmount       BigInt   @default(0) @map("staked_amount")
+  metadataUri        String?  @map("metadata_uri")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  user                  User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  verificationRequests  VerificationRequest[]
+  credentials           Credential[]
+  reputationHistory     ReputationHistory[]
+
+  @@index([solanaPublicKey])
+  @@index([did])
+  @@map("identities")
+}
+
+model VerificationRequest {
+  id                String    @id @default(uuid())
+  identityId        String    @map("identity_id")
+  verificationType  String    @map("verification_type")
+  status            String    @default("pending")
+  requestDataHash   String?   @map("request_data_hash")
+  proofHash         String?   @map("proof_hash")
+  apiSetuRequestId  String?   @map("api_setu_request_id")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  completedAt       DateTime? @map("completed_at")
+  expiresAt         DateTime? @map("expires_at")
+
+  identity Identity @relation(fields: [identityId], references: [id], onDelete: Cascade)
+
+  @@index([identityId])
+  @@index([status])
+  @@map("verification_requests")
+}
+
+model Credential {
+  id             String    @id @default(uuid())
+  credentialId   String    @unique @map("credential_id")
+  identityId     String    @map("identity_id")
+  issuerId       String?   @map("issuer_id")
+  credentialType String    @map("credential_type")
+  issuedAt       DateTime  @default(now()) @map("issued_at")
+  expiresAt      DateTime? @map("expires_at")
+  revoked        Boolean   @default(false)
+  revokedAt      DateTime? @map("revoked_at")
+  metadataUri    String?   @map("metadata_uri")
+  proofHash      String?   @map("proof_hash")
+
+  identity Identity @relation(fields: [identityId], references: [id], onDelete: Cascade)
+
+  @@index([identityId])
+  @@index([credentialType])
+  @@map("credentials")
+}
+
+model ReputationHistory {
+  id          String   @id @default(uuid())
+  identityId  String   @map("identity_id")
+  eventType   String   @map("event_type")
+  scoreDelta  Int      @map("score_delta")
+  newScore    Int      @map("new_score")
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  identity Identity @relation(fields: [identityId], references: [id], onDelete: Cascade)
+
+  @@index([identityId])
+  @@index([createdAt])
+  @@map("reputation_history")
+}
+
+model StakeAccount {
+  id         String    @id @default(uuid())
+  identityId String    @map("identity_id")
+  amount     BigInt
+  stakedAt   DateTime  @default(now()) @map("staked_at")
+  unlockTime DateTime? @map("unlock_time")
+  status     String    @default("active")
+
+  @@index([identityId])
+  @@map("stake_accounts")
+}

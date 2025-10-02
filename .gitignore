@@ -1,0 +1,144 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+.yarn/cache
+.yarn/install-state.gz
+
+# Testing
+coverage/
+.nyc_output
+*.lcov
+test-results/
+junit.xml
+jest-stare/
+.coverage/
+coverage.html
+coverage.xml
+
+# Production
+build/
+dist/
+target/
+.anchor/
+.next/
+out/
+packages/*/dist/
+packages/*/build/
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.stackdump
+Desktop.ini
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Solana/Anchor
+test-ledger/
+keys/*.json
+!keys/.gitkeep
+.anchor/
+target/
+**/*.so
+**/*.keypair.json
+**/test-ledger/
+solana-program-library/
+.anchor/
+app/
+anchor-debug-logs
+
+# Mobile
+packages/mobile/ios/Pods/
+packages/mobile/android/.gradle
+packages/mobile/android/build
+packages/mobile/android/app/build
+packages/mobile/ios/build
+packages/mobile/ios/DerivedData/
+packages/mobile/android/local.properties
+packages/mobile/android/.idea/
+packages/mobile/.expo/
+packages/mobile/.expo-shared/
+.expo/
+.expo-shared/
+
+# React Native
+.metro-cache/
+.watchman/
+react-native-lab/
+
+# Database
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+prisma/migrations/*/migration.sql
+packages/api/prisma/dev.db
+packages/api/prisma/dev.db-journal
+
+# Cache
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+.tsbuildinfo
+.tscache/
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+.temp/
+*.orig
+*.bak
+*.backup
+*~
+
+# Documentation builds
+.docs/build/
+*.pdf
+*.docx
+
+# Additional patterns for comprehensive coverage
+.vercel
+.netlify/
+.firebase/
+public/uploads/
+*.min.js
+*.min.css
+packages/web/.next/
+.env.example

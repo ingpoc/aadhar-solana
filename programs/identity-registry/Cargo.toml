@@ -1,0 +1,21 @@
+[package]
+name = "identity-registry"
+version = "0.1.0"
+description = "Core identity management program for AadhaarChain"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "identity_registry"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+default = []
+
+[dependencies]
+anchor-lang = "0.29.0"
+anchor-spl = "0.29.0"

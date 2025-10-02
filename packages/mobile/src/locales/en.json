@@ -1,0 +1,54 @@
+{
+  "welcome": {
+    "title": "Welcome to AadhaarChain",
+    "subtitle": "Your self-sovereign identity on the blockchain",
+    "getStarted": "Get Started",
+    "learnMore": "Learn More"
+  },
+  "phoneVerification": {
+    "title": "Phone Verification",
+    "subtitle": "Enter your phone number to get started",
+    "phonePlaceholder": "Enter your phone number",
+    "otpPlaceholder": "Enter OTP",
+    "sendOTP": "Send OTP",
+    "verify": "Verify"
+  },
+  "aadhaarVerification": {
+    "title": "Aadhaar Verification",
+    "subtitle": "Verify your identity with Aadhaar",
+    "secureInfo": "Your Aadhaar data is encrypted and securely stored. We never share your information without your consent.",
+    "aadhaarPlaceholder": "Enter 12-digit Aadhaar number",
+    "consentText": "I consent to use my Aadhaar for identity verification",
+    "verify": "Verify Identity"
+  },
+  "biometricSetup": {
+    "title": "Set Up Biometric",
+    "subtitle": "Secure your account with biometric authentication",
+    "enable": "Enable Biometric",
+    "skip": "Skip for Now"
+  },
+  "tabs": {
+    "home": "Home",
+    "credentials": "Credentials",
+    "reputation": "Reputation",
+    "settings": "Settings"
+  },
+  "home": {
+    "greeting": "Welcome Back!",
+    "subtitle": "Your digital identity dashboard",
+    "identityStatus": "Identity Status",
+    "reputationScore": "Reputation Score",
+    "quickActions": "Quick Actions"
+  },
+  "reputation": {
+    "yourScore": "Your Score",
+    "breakdown": "Score Breakdown",
+    "recentActivity": "Recent Activity"
+  },
+  "settings": {
+    "account": "Account",
+    "security": "Security",
+    "privacy": "Privacy",
+    "general": "General"
+  }
+}

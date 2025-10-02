@@ -1,0 +1,23 @@
+[toolchain]
+anchor_version = "0.30.1"
+
+[features]
+seeds = false
+skip-lint = false
+
+[programs.localnet]
+identity_registry = "9cDgdU4VnziNnBzDbWx7yTEhJsiDk27HbcYwUTmTTF6n"
+verification_oracle = "3zNSrpqKKd7Bdsq1JJeVwPyddt9jCcP6Eg9xMgbZtziY"
+credential_manager = "7trw2WbG59rrKKwnCfnFw8mTMNvYpCfpURoVgJYAgTSP"
+reputation_engine = "27mcyzQMfRAf1Y2z9T9cf4DaViEa6Kqc4czwJM1PPonH"
+staking_manager = "GyDkVUfK3u4JzADv8ADw7MyCvn68guX5K1Eo7HVDyZSh"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "Localnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
