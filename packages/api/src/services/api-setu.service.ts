@@ -23,7 +23,9 @@ export class ApiSetuService {
     consent: boolean,
   ): Promise<{ verified: boolean; requestId: string; verificationHash: string }> {
     try {
-      console.log(`Verifying Aadhaar: ${aadhaarNumber.slice(0, 4)}****${aadhaarNumber.slice(-4)}`);
+      // ✅ Hash Aadhaar for logging instead of PII
+      const hashedAadhaar = this.generateHash(`log-${aadhaarNumber}`).slice(0, 16);
+      console.log(`Verifying Aadhaar: hash=${hashedAadhaar}`);
 
       if (!consent) {
         throw new Error('User consent required for Aadhaar verification');
@@ -58,7 +60,9 @@ export class ApiSetuService {
     dateOfBirth: string,
   ): Promise<{ valid: boolean; requestId: string; verificationHash: string; nameMatch: boolean; dobMatch: boolean }> {
     try {
-      console.log(`Verifying PAN: ${panNumber.slice(0, 3)}****${panNumber.slice(-4)}`);
+      // ✅ Hash PAN for logging instead of PII
+      const hashedPAN = this.generateHash(`log-${panNumber}`).slice(0, 16);
+      console.log(`Verifying PAN: hash=${hashedPAN}`);
 
       const response = await this.apiSetuClient.post('/api/verify/pan', {
         panNumber: panNumber,

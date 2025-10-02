@@ -406,6 +406,7 @@
         <button class="tab active" onclick="showTab('overview')">📊 Architecture Overview</button>
         <button class="tab" onclick="showTab('issues')">⚠️ Issues & Analysis</button>
         <button class="tab" onclick="showTab('recommendations')">💡 Recommendations</button>
+        <button class="tab" onclick="showTab('improved')">🏗️ Improved Architecture</button>
     </div>
 
     <div class="container">
@@ -1124,6 +1125,363 @@ console.log(`Verifying Aadhaar: ${aadhaarNumber.slice(0, 4)}****${aadhaarNumber.
                     </ul>
                 </div>
             </div>
+
+        </div>
+
+        <!-- TAB 4: Improved Architecture -->
+        <div id="improved" class="tab-content">
+            <h2 style="margin-bottom: 30px; color: #0052A5;">🏗️ Improved Architecture Diagram</h2>
+
+            <div style="margin-bottom: 40px; padding: 30px; background: #e8f5e9; border-left: 5px solid #4caf50; border-radius: 8px;">
+                <h3 style="color: #2e7d32; margin-bottom: 15px;">✅ Architecture Transformation: From Current to Improved</h3>
+                <p style="color: #1b5e20; line-height: 1.8; margin-bottom: 20px;">
+                    The improved architecture addresses critical gaps while maintaining the solid foundation. Key improvements include:
+                    real blockchain integration, proper service separation, event-driven architecture, and enhanced security.
+                </p>
+            </div>
+
+            <div style="margin: 40px 0; text-align: center;">
+                <h3 style="color: #0052A5; margin-bottom: 30px; font-size: 24px;">🏗️ Improved AadhaarChain Architecture</h3>
+                
+                <!-- Main Architecture Diagram -->
+                <div style="position: relative; max-width: 1200px; margin: 0 auto; padding: 20px;">
+                    <!-- User Layer -->
+                    <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); z-index: 10;">
+                        <div style="background: #2196F3; color: white; padding: 15px 30px; border-radius: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                            <strong>👥 Users</strong><br>
+                            <span style="font-size: 12px;">Web, Mobile, API Clients</span>
+                        </div>
+                    </div>
+
+                    <!-- API Gateway Layer -->
+                    <div style="position: absolute; top: 80px; left: 50%; transform: translateX(-50%); z-index: 9;">
+                        <div style="background: #FF9800; color: white; padding: 12px 25px; border-radius: 20px; box-shadow: 0 3px 12px rgba(0,0,0,0.15);">
+                            <strong>🚪 API Gateway</strong><br>
+                            <span style="font-size: 11px;">Rate Limiting, Auth, Routing</span>
+                        </div>
+                    </div>
+
+                    <!-- Microservices Layer -->
+                    <div style="display: flex; justify-content: space-around; align-items: center; margin-top: 160px; position: relative;">
+                        <!-- Identity Service -->
+                        <div style="background: #4CAF50; color: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); text-align: center; min-width: 180px;">
+                            <strong>🏷️ Identity Service</strong><br>
+                            <span style="font-size: 11px;">User Management<br>DID Operations<br>Profile Data</span>
+                        </div>
+
+                        <!-- Verification Service -->
+                        <div style="background: #9C27B0; color: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); text-align: center; min-width: 180px;">
+                            <strong>✅ Verification Service</strong><br>
+                            <span style="font-size: 11px;">API Setu Integration<br>OTP Workflows<br>Document Verification</span>
+                        </div>
+
+                        <!-- Credential Service -->
+                        <div style="background: #607D8B; color: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); text-align: center; min-width: 180px;">
+                            <strong>🎫 Credential Service</strong><br>
+                            <span style="font-size: 11px;">VC Issuance<br>Revocation<br>Verification</span>
+                        </div>
+
+                        <!-- Reputation Service -->
+                        <div style="background: #795548; color: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); text-align: center; min-width: 180px;">
+                            <strong>⭐ Reputation Service</strong><br>
+                            <span style="font-size: 11px;">Score Calculation<br>Activity Tracking<br>Reward Distribution</span>
+                        </div>
+                    </div>
+
+                    <!-- Event Bus -->
+                    <div style="position: absolute; top: 320px; left: 50%; transform: translateX(-50%); z-index: 8;">
+                        <div style="background: #E91E63; color: white; padding: 10px 20px; border-radius: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.15);">
+                            <strong>📨 Event Bus</strong><br>
+                            <span style="font-size: 10px;">Async Communication<br>Event Sourcing</span>
+                        </div>
+                    </div>
+
+                    <!-- Blockchain Layer -->
+                    <div style="display: flex; justify-content: center; margin-top: 380px; gap: 15px;">
+                        <div style="background: #673AB7; color: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align: center; min-width: 140px;">
+                            <strong>⛓️ Identity Registry</strong><br>
+                            <span style="font-size: 10px;">DID Management<br>On-Chain State</span>
+                        </div>
+                        <div style="background: #3F51B5; color: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align: center; min-width: 140px;">
+                            <strong>🔍 Verification Oracle</strong><br>
+                            <span style="font-size: 10px;">Government Integration<br>Proof Validation</span>
+                        </div>
+                        <div style="background: #009688; color: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align: center; min-width: 140px;">
+                            <strong>🎫 Credential Manager</strong><br>
+                            <span style="font-size: 10px;">VC Lifecycle<br>ZK Proofs</span>
+                        </div>
+                        <div style="background: #8BC34A; color: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align: center; min-width: 140px;">
+                            <strong>💎 Reputation Engine</strong><br>
+                            <span style="font-size: 10px;">Score Algorithms<br>Reward Logic</span>
+                        </div>
+                        <div style="background: #FFC107; color: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align: center; min-width: 140px;">
+                            <strong>💰 Staking Manager</strong><br>
+                            <span style="font-size: 10px;">Economic Incentives<br>Token Economics</span>
+                        </div>
+                    </div>
+
+                    <!-- Infrastructure Layer -->
+                    <div style="display: flex; justify-content: space-around; margin-top: 520px; align-items: center;">
+                        <div style="background: #795548; color: white; padding: 12px 20px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.15); text-align: center;">
+                            <strong>🗄️ PostgreSQL</strong><br>
+                            <span style="font-size: 10px;">Application Data<br>User Profiles</span>
+                        </div>
+                        <div style="background: #F44336; color: white; padding: 12px 20px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.15); text-align: center;">
+                            <strong>🔄 Redis</strong><br>
+                            <span style="font-size: 10px;">Caching<br>Session Store</span>
+                        </div>
+                        <div style="background: #FF5722; color: white; padding: 12px 20px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.15); text-align: center;">
+                            <strong>📊 Event Store</strong><br>
+                            <span style="font-size: 10px;">Audit Trail<br>Event Sourcing</span>
+                        </div>
+                        <div style="background: #00BCD4; color: white; padding: 12px 20px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.15); text-align: center;">
+                            <strong>📁 IPFS</strong><br>
+                            <span style="font-size: 10px;">Document Storage<br>Metadata</span>
+                        </div>
+                    </div>
+
+                    <!-- Connection Lines -->
+                    <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;">
+                        <!-- Vertical connections -->
+                        <line x1="50%" y1="60px" x2="50%" y2="100px" stroke="#ddd" stroke-width="2" stroke-dasharray="5,5"/>
+                        <line x1="50%" y1="140px" x2="50%" y2="280px" stroke="#ddd" stroke-width="2"/>
+                        <line x1="50%" y1="350px" x2="50%" y2="370px" stroke="#ddd" stroke-width="2"/>
+                        
+                        <!-- Horizontal connections in blockchain layer -->
+                        <line x1="15%" y1="450px" x2="85%" y2="450px" stroke="#9C27B0" stroke-width="3"/>
+                        
+                        <!-- Diagonal connections from services to blockchain -->
+                        <line x1="25%" y1="300px" x2="15%" y2="430px" stroke="#4CAF50" stroke-width="2"/>
+                        <line x1="35%" y1="300px" x2="25%" y2="430px" stroke="#9C27B0" stroke-width="2"/>
+                        <line x1="50%" y1="300px" x2="40%" y2="430px" stroke="#607D8B" stroke-width="2"/>
+                        <line x1="65%" y1="300px" x2="60%" y2="430px" stroke="#795548" stroke-width="2"/>
+                        <line x1="75%" y1="300px" x2="85%" y2="430px" stroke="#FFC107" stroke-width="2"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 40px 0;">
+                <!-- Service Architecture Details -->
+                <div style="background: #f8f9fa; padding: 25px; border-radius: 10px; border-left: 4px solid #2196F3;">
+                    <h4 style="color: #1976D2; margin-bottom: 20px;">🔧 Service Architecture Improvements</h4>
+                    <ul style="line-height: 1.8; color: #333;">
+                        <li><strong>Repository Pattern:</strong> Clean data access abstraction</li>
+                        <li><strong>Gateway Pattern:</strong> External service integration</li>
+                        <li><strong>Circuit Breaker:</strong> Resilience for external APIs</li>
+                        <li><strong>Event Sourcing:</strong> Audit trail and loose coupling</li>
+                        <li><strong>CQRS Pattern:</strong> Separate read/write operations</li>
+                    </ul>
+                </div>
+
+                <!-- Security Architecture Details -->
+                <div style="background: #f8f9fa; padding: 25px; border-radius: 10px; border-left: 4px solid #4CAF50;">
+                    <h4 style="color: #388E3C; margin-bottom: 20px;">🔒 Security Architecture Enhancements</h4>
+                    <ul style="line-height: 1.8; color: #333;">
+                        <li><strong>Zero-Trust Model:</strong> Verify every request</li>
+                        <li><strong>Multi-Layer Auth:</strong> JWT + API keys + RBAC</li>
+                        <li><strong>Rate Limiting:</strong> Redis-based request throttling</li>
+                        <li><strong>Privacy Controls:</strong> Granular data sharing consent</li>
+                        <li><strong>Audit Logging:</strong> Immutable security event logs</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Data Flow Diagram -->
+            <div style="margin: 40px 0; padding: 30px; background: #fff3e0; border-radius: 10px; border-left: 5px solid #ff9800;">
+                <h4 style="color: #e65100; margin-bottom: 25px;">📊 Improved Data Flow Architecture</h4>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+                    <div style="background: #2196F3; color: white; padding: 15px; border-radius: 8px; text-align: center; min-width: 120px;">
+                        <strong>🔐 User Request</strong><br>
+                        <span style="font-size: 12px;">JWT + API Key</span>
+                    </div>
+                    
+                    <div style="font-size: 20px; color: #666;">↓</div>
+                    
+                    <div style="background: #FF9800; color: white; padding: 15px; border-radius: 8px; text-align: center; min-width: 120px;">
+                        <strong>🚪 API Gateway</strong><br>
+                        <span style="font-size: 12px;">Rate Limit + Auth</span>
+                    </div>
+                    
+                    <div style="font-size: 20px; color: #666;">↓</div>
+                    
+                    <div style="background: #4CAF50; color: white; padding: 15px; border-radius: 8px; text-align: center; min-width: 120px;">
+                        <strong>⚙️ Microservice</strong><br>
+                        <span style="font-size: 12px;">Business Logic</span>
+                    </div>
+                    
+                    <div style="font-size: 20px; color: #666;">↓</div>
+                    
+                    <div style="background: #9C27B0; color: white; padding: 15px; border-radius: 8px; text-align: center; min-width: 120px;">
+                        <strong>🏪 Repository</strong><br>
+                        <span style="font-size: 12px;">Data Access</span>
+                    </div>
+                    
+                    <div style="font-size: 20px; color: #666;">↓</div>
+                    
+                    <div style="background: #607D8B; color: white; padding: 15px; border-radius: 8px; text-align: center; min-width: 120px;">
+                        <strong>🗄️ Database</strong><br>
+                        <span style="font-size: 12px;">PostgreSQL</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; display: flex; align-items: center; justify-content: center; gap: 20px;">
+                    <div style="background: #E91E63; color: white; padding: 12px; border-radius: 8px; text-align: center; min-width: 100px;">
+                        <strong>📨 Event Bus</strong><br>
+                        <span style="font-size: 11px;">Async Events</span>
+                    </div>
+                    
+                    <div style="font-size: 18px; color: #666;">↔️</div>
+                    
+                    <div style="background: #795548; color: white; padding: 12px; border-radius: 8px; text-align: center; min-width: 100px;">
+                        <strong>📊 Event Store</strong><br>
+                        <span style="font-size: 11px;">Audit Trail</span>
+                    </div>
+                    
+                    <div style="font-size: 18px; color: #666;">↔️</div>
+                    
+                    <div style="background: #3F51B5; color: white; padding: 12px; border-radius: 8px; text-align: center; min-width: 100px;">
+                        <strong>⛓️ Blockchain</strong><br>
+                        <span style="font-size: 11px;">Solana Programs</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Architecture Benefits -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin: 40px 0;">
+                <div style="background: #e3f2fd; padding: 25px; border-radius: 10px; border-left: 4px solid #2196f3;">
+                    <h5 style="color: #1976d2; margin-bottom: 15px;">⚡ Performance</h5>
+                    <ul style="line-height: 1.6; color: #1565c0; font-size: 14px;">
+                        <li>• Multi-layer caching strategy</li>
+                        <li>• Reactive programming model</li>
+                        <li>• Horizontal scaling capability</li>
+                        <li>• Database query optimization</li>
+                    </ul>
+                </div>
+
+                <div style="background: #e8f5e9; padding: 25px; border-radius: 10px; border-left: 4px solid #4caf50;">
+                    <h5 style="color: #388e3c; margin-bottom: 15px;">🔒 Security</h5>
+                    <ul style="line-height: 1.6; color: #2e7d32; font-size: 14px;">
+                        <li>• Zero-trust security model</li>
+                        <li>• End-to-end encryption</li>
+                        <li>• Circuit breaker patterns</li>
+                        <li>• Comprehensive audit logging</li>
+                    </ul>
+                </div>
+
+                <div style="background: #fff3e0; padding: 25px; border-radius: 10px; border-left: 4px solid #ff9800;">
+                    <h5 style="color: #f57c00; margin-bottom: 15px;">🔧 Reliability</h5>
+                    <ul style="line-height: 1.6; color: #ef6c00; font-size: 14px;">
+                        <li>• Event-driven architecture</li>
+                        <li>• Service mesh integration</li>
+                        <li>• Distributed tracing</li>
+                        <li>• Chaos engineering ready</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Implementation Priority -->
+            <div style="margin: 40px 0; padding: 30px; background: #f3e5f5; border-radius: 10px; border-left: 5px solid #9c27b0;">
+                <h4 style="color: #7b1fa2; margin-bottom: 25px;">🎯 Implementation Priority & Timeline</h4>
+                
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+                    <div style="background: white; padding: 20px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 24px; font-weight: bold; color: #f44336;">Week 1</div>
+                        <div style="color: #d32f2f; font-size: 14px; margin-top: 10px;">
+                            <strong>Critical Fixes</strong><br>
+                            • Real blockchain integration<br>
+                            • Rate limiting<br>
+                            • Security hardening
+                        </div>
+                    </div>
+
+                    <div style="background: white; padding: 20px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 24px; font-weight: bold; color: #ff9800;">Week 2</div>
+                        <div style="color: #f57c00; font-size: 14px; margin-top: 10px;">
+                            <strong>Service Architecture</strong><br>
+                            • Repository pattern<br>
+                            • Gateway abstractions<br>
+                            • Circuit breakers
+                        </div>
+                    </div>
+
+                    <div style="background: white; padding: 20px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 24px; font-weight: bold; color: #2196f3;">Week 3</div>
+                        <div style="color: #1976d2; font-size: 14px; margin-top: 10px;">
+                            <strong>Event-Driven Architecture</strong><br>
+                            • Event bus implementation<br>
+                            • Event sourcing<br>
+                            • Async processing
+                        </div>
+                    </div>
+
+                    <div style="background: white; padding: 20px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 24px; font-weight: bold; color: #4caf50;">Week 4</div>
+                        <div style="color: #388e3c; font-size: 14px; margin-top: 10px;">
+                            <strong>Production Hardening</strong><br>
+                            • Monitoring & alerting<br>
+                            • Performance optimization<br>
+                            • Documentation
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Improvements Summary -->
+            <div style="margin: 40px 0; padding: 30px; background: #e0f2f1; border-radius: 10px; border-left: 5px solid #26a69a;">
+                <h4 style="color: #00695c; margin-bottom: 20px;">🚀 Key Architecture Transformations</h4>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <div>
+                        <h5 style="color: #004d40; margin-bottom: 15px;">❌ Current Issues → ✅ Improved Solutions</h5>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr style="background: #b2dfdb;">
+                                <td style="padding: 10px; font-weight: bold; color: #004d40;">Current Issue</td>
+                                <td style="padding: 10px; font-weight: bold; color: #004d40;">Improved Solution</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid #80cbc4;">Blockchain calls return mock signatures</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #80cbc4;">Real blockchain integration with IDL loading</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid #80cbc4;">No rate limiting (security vulnerability)</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #80cbc4;">Redis-based rate limiting middleware</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid #80cbc4;">PII data in logs (GDPR violation)</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #80cbc4;">Hashed identifiers with audit logging</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;">Mixed service concerns</td>
+                                <td style="padding: 10px;">Clean repository and gateway patterns</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div>
+                        <h5 style="color: #004d40; margin-bottom: 15px;">📈 Expected Outcomes</h5>
+                        <ul style="line-height: 1.8; color: #004d40;">
+                            <li><strong>Real Blockchain Platform:</strong> Actual Solana program calls vs mock signatures</li>
+                            <li><strong>Enterprise Security:</strong> Rate limiting, proper logging, input validation</li>
+                            <li><strong>Production Reliability:</strong> Comprehensive testing, error handling</li>
+                            <li><strong>Scalable Architecture:</strong> Microservices, event-driven, caching layers</li>
+                            <li><strong>Government Compliance:</strong> GDPR/DPDP compliant data handling</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px; padding: 30px; background: #fce4ec; border-radius: 10px; border-left: 5px solid #e91e63;">
+                <h3 style="color: #c2185b; margin-bottom: 15px;">🎯 Architecture Vision</h3>
+                <p style="color: #ad1457; font-size: 18px; line-height: 1.6;">
+                    From <strong>blockchain-themed database application</strong> to <br>
+                    <strong>world-class, enterprise-grade blockchain identity platform</strong>
+                </p>
+                <p style="color: #ad1457; margin-top: 20px; font-size: 16px;">
+                    Ready to serve millions of users with security, privacy, and reliability
+                </p>
+            </div>
+        </div>
 
             <div style="margin-top: 40px; padding: 30px; background: #e8f5e9; border-left: 5px solid #4caf50; border-radius: 8px;">
                 <h3 style="color: #2e7d32; margin-bottom: 15px;">✅ Validation: You Were Correct</h3>

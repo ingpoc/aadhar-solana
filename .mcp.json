@@ -1,47 +1,79 @@
 {
-    "mcpServers": {
-        "playwright": {
-            "command": "npx",
-            "args": ["-y", "@playwright/mcp@latest"]
-        },
-        "context7": {
-            "command": "npx",
-            "args": ["-y", "@upstash/context7-mcp@latest"]
-        },
-        "solana-agent-kit": {
-            "command": "npx",
-            "args": ["-y", "@solana-agent-kit/mcp-server"],
-            "env": {
-                "SOLANA_RPC_URL": "https://api.devnet.solana.com",
-                "SOLANA_PRIVATE_KEY": ""
-            }
-        },
-        "postgresql-mcp": {
-            "command": "npx",
-            "args": ["-y", "@mark3labs/mcp-server-postgres"],
-            "env": {
-                "DATABASE_URL": "postgresql://localhost:5432/aadhaarchain_dev"
-            }
-        },
-        "react-native-mcp": {
-            "command": "npx",
-            "args": ["-y", "@react-native-community/mcp-server"]
-        },
-        "typescript-sdk": {
-            "command": "npx",
-            "args": ["-y", "@modelcontextprotocol/server-typescript"]
-        },
-        "filesystem": {
-            "command": "npx",
-            "args": ["-y", "@modelcontextprotocol/server-filesystem"],
-            "args": ["/Users/gurusharan/Documents/remote-claude/aadhar-solana"]
-        },
-        "github": {
-            "command": "npx",
-            "args": ["-y", "@modelcontextprotocol/server-github"],
-            "env": {
-                "GITHUB_PERSONAL_ACCESS_TOKEN": ""
-            }
-        }
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
+      ]
+    },
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
+    },
+    "solana-agent-kit": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@solana-agent-kit/mcp-server"
+      ],
+      "env": {
+        "SOLANA_RPC_URL": "https://api.devnet.solana.com",
+        "SOLANA_PRIVATE_KEY": ""
+      },
+      "disabled": true,
+      "alwaysAllow": []
+    },
+    "postgresql-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@mark3labs/mcp-server-postgres"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql://localhost:5432/aadhaarchain_dev"
+      },
+      "disabled": true,
+      "alwaysAllow": []
+    },
+    "react-native-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@react-native-community/mcp-server"
+      ],
+      "disabled": true,
+      "alwaysAllow": []
+    },
+    "typescript-sdk": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-typescript"
+      ],
+      "disabled": true,
+      "alwaysAllow": []
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "/Users/gurusharan/Documents/remote-claude/aadhar-solana"
+      ],
+      "disabled": true,
+      "alwaysAllow": []
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": ""
+      }
     }
+  }
 }
