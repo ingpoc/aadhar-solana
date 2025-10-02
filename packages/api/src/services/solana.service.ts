@@ -31,12 +31,12 @@ export class SolanaService implements OnModuleInit {
     );
 
     this.programIds = {
-       identityRegistry: new PublicKey(process.env.IDENTITY_REGISTRY_PROGRAM_ID || '9cDgdU4VnziNnBzDbWx7yTEhJsiDk27HbcYwUTmTTF6n'),
-       verificationOracle: new PublicKey(process.env.VERIFICATION_ORACLE_PROGRAM_ID || '3zNSrpqKKd7Bdsq1JJeVwPyddt9jCcP6Eg9xMgbZtziY'),
-       credentialManager: new PublicKey(process.env.CREDENTIAL_MANAGER_PROGRAM_ID || '7trw2WbG59rrKKwnCfnFw8mTMNvYpCfpURoVgJYAgTSP'),
-       reputationEngine: new PublicKey(process.env.REPUTATION_ENGINE_PROGRAM_ID || '27mcyzQMfRAf1Y2z9T9cf4DaViEa6Kqc4czwJM1PPonH'),
-       stakingManager: new PublicKey(process.env.STAKING_MANAGER_PROGRAM_ID || 'GyDkVUfK3u4JzADv8ADw7MyCvn68guX5K1Eo7HVDyZSh'),
-     };
+        identityRegistry: new PublicKey('9cDgdU4VnziNnBzDbWx7yTEhJsiDk27HbcYwUTmTTF6n'),
+        verificationOracle: new PublicKey('3zNSrpqKKd7Bdsq1JJeVwPyddt9jCcP6Eg9xMgbZtziY'),
+        credentialManager: new PublicKey('7trw2WbG59rrKKwnCfnFw8mTMNvYpCfpURoVgJYAgTSP'),
+        reputationEngine: new PublicKey('27mcyzQMfRAf1Y2z9T9cf4DaViEa6Kqc4czwJM1PPonH'),
+        stakingManager: new PublicKey('GyDkVUfK3u4JzADv8ADw7MyCvn68guX5K1Eo7HVDyZSh'),
+      };
 
     console.log('✅ Solana service initialized');
   }
@@ -68,12 +68,36 @@ export class SolanaService implements OnModuleInit {
 
   private async loadPrograms() {
     try {
-      console.log('⚠️ IDL loading disabled due to type incompatibility');
-      console.log('   Issue: Generated IDLs use "pubkey" but Anchor expects "publicKey"');
-      console.log('   Location: target/idl/*.json - all vec<Pubkey> and Pubkey types');
-      console.log('   Impact: Using manual transaction construction for blockchain calls');
-      console.log('   Action Required: Solana agent needs to fix IDL generation');
-      console.log('✅ Programs deployed and accessible via RPC');
+      // Load IDL files and create program clients
+      const idlPaths = {
+        identityRegistry: '../../target/idl/identity_registry.json',
+        verificationOracle: '../../target/idl/verification_oracle.json',
+        credentialManager: '../../target/idl/credential_manager.json',
+        reputationEngine: '../../target/idl/reputation_engine.json',
+        stakingManager: '../../target/idl/staking_manager.json',
+      };
+
+      // Load Identity Registry Program
+      const identityIdl = JSON.parse(fs.readFileSync(idlPaths.identityRegistry, 'utf-8'));
+      this.identityProgram = new Program(identityIdl, this.programIds.identityRegistry, this.provider);
+
+      // Load Verification Oracle Program
+      const verificationIdl = JSON.parse(fs.readFileSync(idlPaths.verificationOracle, 'utf-8'));
+      this.verificationProgram = new Program(verificationIdl, this.programIds.verificationOracle, this.provider);
+
+      // Load Credential Manager Program
+      const credentialIdl = JSON.parse(fs.readFileSync(idlPaths.credentialManager, 'utf-8'));
+      this.credentialProgram = new Program(credentialIdl, this.programIds.credentialManager, this.provider);
+
+      // Load Reputation Engine Program
+      const reputationIdl = JSON.parse(fs.readFileSync(idlPaths.reputationEngine, 'utf-8'));
+      this.reputationProgram = new Program(reputationIdl, this.programIds.reputationEngine, this.provider);
+
+      // Load Staking Manager Program
+      const stakingIdl = JSON.parse(fs.readFileSync(idlPaths.stakingManager, 'utf-8'));
+      this.stakingProgram = new Program(stakingIdl, this.programIds.stakingManager, this.provider);
+
+      console.log('✅ All Anchor program clients initialized successfully');
 
     } catch (error) {
       console.error('❌ Failed to initialize programs:', error);

@@ -15,6 +15,33 @@ export class IdentityService {
   async createIdentity(createIdentityDto: CreateIdentityDto) {
     const { publicKey, did, metadataUri, recoveryKeys } = createIdentityDto;
 
+    // Check if identity already exists
+    const existingIdentity = await this.db.identity.findUnique({
+      where: { solanaPublicKey: publicKey },
+      include: { user: true },
+    });
+
+    if (existingIdentity) {
+      return {
+        success: true,
+        data: {
+          identityId: existingIdentity.id,
+          did: existingIdentity.did,
+          status: 'exists',
+          message: 'Identity already exists',
+        },
+      };
+    }
+
+    // Create blockchain account first
+    const txSignature = await this.solana.createIdentityAccount(
+      publicKey,
+      did,
+      metadataUri,
+      recoveryKeys || [],
+    );
+
+    // Then create database record
     const identity = await this.db.identity.create({
       data: {
         solanaPublicKey: publicKey,
@@ -32,19 +59,12 @@ export class IdentityService {
       },
     });
 
-    const txSignature = await this.solana.createIdentityAccount(
-      publicKey,
-      did,
-      metadataUri,
-      recoveryKeys || [],
-    );
-
     return {
       success: true,
       data: {
         identityId: identity.id,
         did: identity.did,
-        status: 'pending',
+        status: 'created',
         transactionSignature: txSignature,
       },
     };
