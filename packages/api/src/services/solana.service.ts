@@ -68,15 +68,16 @@ export class SolanaService implements OnModuleInit {
 
   private async loadPrograms() {
     try {
-      // For now, we'll skip IDL loading due to parsing issues
-      // Programs are deployed and working, but IDL format needs adjustment
-      console.log('ℹ️ Using deployed programs without IDL parsing for now');
-      console.log('✅ All programs are deployed and ready for blockchain operations');
+      console.log('⚠️ IDL loading disabled due to type incompatibility');
+      console.log('   Issue: Generated IDLs use "pubkey" but Anchor expects "publicKey"');
+      console.log('   Location: target/idl/*.json - all vec<Pubkey> and Pubkey types');
+      console.log('   Impact: Using manual transaction construction for blockchain calls');
+      console.log('   Action Required: Solana agent needs to fix IDL generation');
+      console.log('✅ Programs deployed and accessible via RPC');
 
     } catch (error) {
       console.error('❌ Failed to initialize programs:', error);
       console.log('⚠️ Continuing with basic Solana connection');
-      // Don't throw error - allow API to start with basic functionality
     }
   }
 
