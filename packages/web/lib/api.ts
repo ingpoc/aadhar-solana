@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { PublicKey } from '@solana/web3.js';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/v1';
 
@@ -9,12 +10,23 @@ export const api = axios.create({
   },
 });
 
+export const isValidSolanaAddress = (address: string): boolean => {
+  try {
+    new PublicKey(address);
+    return address.length === 44;
+  } catch {
+    return false;
+  }
+};
+
 export const identityApi = {
   create: (data: {
     publicKey: string;
-    did: string;
-    metadataUri?: string;
-    recoveryKeys?: string[];
+    metadata?: {
+      name?: string;
+      email?: string;
+      phone?: string;
+    };
   }) => api.post('/identity', data),
 
   getById: (id: string) => api.get(`/identity/${id}`),

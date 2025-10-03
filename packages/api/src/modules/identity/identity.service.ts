@@ -13,7 +13,7 @@ export class IdentityService {
   ) {}
 
   async createIdentity(createIdentityDto: CreateIdentityDto) {
-    const { publicKey, did, metadataUri, recoveryKeys } = createIdentityDto;
+    const { publicKey, metadata } = createIdentityDto;
 
     // Check if identity already exists
     const existingIdentity = await this.db.identity.findUnique({
@@ -25,20 +25,24 @@ export class IdentityService {
       return {
         success: true,
         data: {
-          identityId: existingIdentity.id,
+          id: existingIdentity.id,
           did: existingIdentity.did,
+          solanaPublicKey: existingIdentity.solanaPublicKey,
           status: 'exists',
           message: 'Identity already exists',
         },
       };
     }
 
+    const did = `did:sol:${publicKey}`;
+    const metadataUri = metadata ? `ipfs://metadata/${publicKey}` : undefined;
+
     // Create blockchain account first
     const txSignature = await this.solana.createIdentityAccount(
       publicKey,
       did,
       metadataUri,
-      recoveryKeys || [],
+      [],
     );
 
     // Then create database record
@@ -49,8 +53,8 @@ export class IdentityService {
         metadataUri,
         user: {
           create: {
-            email: createIdentityDto.email,
-            phone: createIdentityDto.phone,
+            email: metadata?.email,
+            phone: metadata?.phone,
           },
         },
       },
@@ -62,10 +66,12 @@ export class IdentityService {
     return {
       success: true,
       data: {
-        identityId: identity.id,
+        id: identity.id,
         did: identity.did,
+        solanaPublicKey: identity.solanaPublicKey,
         status: 'created',
         transactionSignature: txSignature,
+        createdAt: identity.createdAt.toISOString(),
       },
     };
   }

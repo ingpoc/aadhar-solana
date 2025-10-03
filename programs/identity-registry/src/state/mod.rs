@@ -1,5 +1,9 @@
 use anchor_lang::prelude::*;
 
+pub const MAX_DID_LEN: usize = 128;
+pub const MAX_URI_LEN: usize = 256;
+pub const MAX_RECOVERY_KEYS: usize = 5;
+
 #[account]
 pub struct IdentityAccount {
     pub authority: Pubkey,           // 32
@@ -15,7 +19,17 @@ pub struct IdentityAccount {
 }
 
 impl IdentityAccount {
-    pub const LEN: usize = 32 + 132 + 8 + 8 + 8 + 8 + 8 + 260 + 164 + 1;
+    pub const LEN: usize = 8 +   // discriminator
+        32 +                      // authority
+        4 + MAX_DID_LEN +         // did (String)
+        8 +                       // verification_bitmap
+        8 +                       // reputation_score
+        8 +                       // staked_amount
+        8 +                       // created_at
+        8 +                       // last_updated
+        4 + MAX_URI_LEN +         // metadata_uri (String)
+        4 + (MAX_RECOVERY_KEYS * 32) + // recovery_keys (Vec<Pubkey>)
+        1;                        // bump
 }
 
 #[account]

@@ -1,24 +1,12 @@
-import { IsString, IsOptional, IsArray, IsEmail } from 'class-validator';
+import { IsString, IsOptional, IsArray, IsEmail, ValidateNested, IsObject } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 
-export class CreateIdentityDto {
-  @ApiProperty({ description: 'Solana public key' })
-  @IsString()
-  publicKey: string;
-
-  @ApiProperty({ description: 'Decentralized Identifier (DID)' })
-  @IsString()
-  did: string;
-
-  @ApiProperty({ description: 'IPFS metadata URI', required: false })
+export class IdentityMetadataDto {
+  @ApiProperty({ description: 'User full name', required: false })
   @IsOptional()
   @IsString()
-  metadataUri?: string;
-
-  @ApiProperty({ description: 'Recovery public keys', required: false })
-  @IsOptional()
-  @IsArray()
-  recoveryKeys?: string[];
+  name?: string;
 
   @ApiProperty({ description: 'User email', required: false })
   @IsOptional()
@@ -29,6 +17,18 @@ export class CreateIdentityDto {
   @IsOptional()
   @IsString()
   phone?: string;
+}
+
+export class CreateIdentityDto {
+  @ApiProperty({ description: 'Solana public key' })
+  @IsString()
+  publicKey: string;
+
+  @ApiProperty({ description: 'User metadata', required: false, type: IdentityMetadataDto })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => IdentityMetadataDto)
+  metadata?: IdentityMetadataDto;
 }
 
 export class UpdateIdentityDto {

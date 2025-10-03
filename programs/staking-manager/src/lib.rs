@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_lang::system_program;
 
-declare_id!("FqSMx8qQqKvpwHHzCvuqQtmKLx4zUqNqmJz7uSxYpGhR");
+declare_id!("GyDkVUfK3u4JzADv8ADw7MyCvn68guX5K1Eo7HVDyZSh");
 
 pub mod state;
 pub mod errors;

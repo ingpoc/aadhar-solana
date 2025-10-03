@@ -6,11 +6,21 @@ const SOLANA_RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || 'http://localho
 export const connection = new Connection(SOLANA_RPC_URL, 'confirmed');
 
 export const PROGRAM_IDS = {
-  identityRegistry: new PublicKey('9cDgdU4VnziNnBzDbWx7yTEhJsiDk27HbcYwUTmTTF6n'),
-  verificationOracle: new PublicKey('3zNSrpqKKd7Bdsq1JJeVwPyddt9jCcP6Eg9xMgbZtziY'),
-  credentialManager: new PublicKey('7trw2WbG59rrKKwnCfnFw8mTMNvYpCfpURoVgJYAgTSP'),
-  reputationEngine: new PublicKey('27mcyzQMfRAf1Y2z9T9cf4DaViEa6Kqc4czwJM1PPonH'),
-  stakingManager: new PublicKey('GyDkVUfK3u4JzADv8ADw7MyCvn68guX5K1Eo7HVDyZSh'),
+  identityRegistry: new PublicKey(
+    process.env.NEXT_PUBLIC_IDENTITY_REGISTRY_ID || '9cDgdU4VnziNnBzDbWx7yTEhJsiDk27HbcYwUTmTTF6n'
+  ),
+  verificationOracle: new PublicKey(
+    process.env.NEXT_PUBLIC_VERIFICATION_ORACLE_ID || '3zNSrpqKKd7Bdsq1JJeVwPyddt9jCcP6Eg9xMgbZtziY'
+  ),
+  credentialManager: new PublicKey(
+    process.env.NEXT_PUBLIC_CREDENTIAL_MANAGER_ID || '7trw2WbG59rrKKwnCfnFw8mTMNvYpCfpURoVgJYAgTSP'
+  ),
+  reputationEngine: new PublicKey(
+    process.env.NEXT_PUBLIC_REPUTATION_ENGINE_ID || '27mcyzQMfRAf1Y2z9T9cf4DaViEa6Kqc4czwJM1PPonH'
+  ),
+  stakingManager: new PublicKey(
+    process.env.NEXT_PUBLIC_STAKING_MANAGER_ID || 'GyDkVUfK3u4JzADv8ADw7MyCvn68guX5K1Eo7HVDyZSh'
+  ),
 };
 
 export const findIdentityPDA = (authority: PublicKey): [PublicKey, number] => {
