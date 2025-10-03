@@ -43,6 +43,7 @@ export class IdentityService {
       did,
       metadataUri,
       [],
+      createIdentityDto.signedTransaction,
     );
 
     // Then create database record
@@ -72,6 +73,28 @@ export class IdentityService {
         status: 'created',
         transactionSignature: txSignature,
         createdAt: identity.createdAt.toISOString(),
+      },
+    };
+  }
+
+  async prepareCreateIdentityTransaction(createIdentityDto: CreateIdentityDto) {
+    const { publicKey, metadata } = createIdentityDto;
+
+    const did = `did:sol:${publicKey}`;
+    const metadataUri = metadata ? `ipfs://metadata/${publicKey}` : undefined;
+
+    const unsignedTransaction = await this.solana.prepareCreateIdentityTransaction(
+      publicKey,
+      did,
+      metadataUri,
+      [],
+    );
+
+    return {
+      success: true,
+      data: {
+        transaction: unsignedTransaction,
+        message: 'Please sign this transaction with your wallet',
       },
     };
   }

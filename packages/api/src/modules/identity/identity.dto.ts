@@ -29,6 +29,10 @@ export class CreateIdentityDto {
   @ValidateNested()
   @Type(() => IdentityMetadataDto)
   metadata?: IdentityMetadataDto;
+
+  @ApiProperty({ description: 'Signed transaction (base64 encoded)' })
+  @IsString()
+  signedTransaction: string;
 }
 
 export class UpdateIdentityDto {

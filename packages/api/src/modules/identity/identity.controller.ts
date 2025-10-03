@@ -16,6 +16,14 @@ export class IdentityController {
     return this.identityService.createIdentity(createIdentityDto);
   }
 
+  @Post('prepare-transaction')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Prepare unsigned transaction for user to sign' })
+  @ApiResponse({ status: 200, description: 'Unsigned transaction prepared' })
+  async prepareTransaction(@Body() createIdentityDto: CreateIdentityDto) {
+    return this.identityService.prepareCreateIdentityTransaction(createIdentityDto);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get identity by ID' })
   @ApiResponse({ status: 200, description: 'Identity found' })

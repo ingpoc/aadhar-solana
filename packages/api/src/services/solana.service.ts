@@ -2,6 +2,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Connection, PublicKey, Transaction, Keypair, SystemProgram } from '@solana/web3.js';
 import { AnchorProvider, Program, Wallet } from '@coral-xyz/anchor';
 import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class SolanaService implements OnModuleInit {
@@ -43,14 +44,15 @@ export class SolanaService implements OnModuleInit {
 
   async onModuleInit() {
     // Load wallet
-    const walletPath = process.env.SOLANA_WALLET_PATH || './keys/admin-keypair.json';
+    const walletPath = process.env.SOLANA_WALLET_PATH || path.join(process.cwd(), '../../keys/admin-keypair.json');
     if (fs.existsSync(walletPath)) {
       const walletData = JSON.parse(fs.readFileSync(walletPath, 'utf-8'));
       this.wallet = Keypair.fromSecretKey(Uint8Array.from(walletData));
+      console.log(`✅ Loaded wallet: ${this.wallet.publicKey.toString()}`);
     } else {
       // Generate a new wallet for development
       this.wallet = Keypair.generate();
-      console.log('⚠️ Using generated wallet for development');
+      console.log(`⚠️ Using generated wallet for development (wallet path: ${walletPath})`);
     }
 
     // Initialize provider
@@ -110,6 +112,28 @@ export class SolanaService implements OnModuleInit {
     did: string,
     metadataUri: string,
     recoveryKeys: string[],
+    signedTransaction: string,
+  ): Promise<string> {
+    try {
+      console.log(`Creating identity for ${authority}`);
+
+      const tx = Buffer.from(signedTransaction, 'base64');
+      const signature = await this._connection.sendRawTransaction(tx);
+      await this._connection.confirmTransaction(signature);
+
+      console.log(`✅ Identity created successfully: ${signature}`);
+      return signature;
+    } catch (error) {
+      console.error('❌ Error creating identity account:', error);
+      throw error;
+    }
+  }
+
+  async prepareCreateIdentityTransaction(
+    authority: string,
+    did: string,
+    metadataUri: string,
+    recoveryKeys: string[],
   ): Promise<string> {
     try {
       const authorityPubkey = new PublicKey(authority);
@@ -120,53 +144,22 @@ export class SolanaService implements OnModuleInit {
         this.programIds.identityRegistry,
       );
 
-      console.log(`Creating identity for ${authority}`);
-      console.log(`Identity PDA: ${identityPDA.toString()}`);
+      const tx = await this.identityProgram.methods
+        .createIdentity(did, metadataUri, recoveryPubkeys)
+        .accounts({
+          identityAccount: identityPDA,
+          authority: authorityPubkey,
+          systemProgram: SystemProgram.programId,
+        })
+        .transaction();
 
-      // For now, we'll use the admin wallet to sign transactions
-      // In production, this would need proper wallet signature from the user
-      const signerKeypair = Keypair.fromSecretKey(
-        new Uint8Array(JSON.parse(require('fs').readFileSync('./test-wallet.json', 'utf-8')))
-      );
+      const { blockhash } = await this._connection.getLatestBlockhash();
+      tx.recentBlockhash = blockhash;
+      tx.feePayer = authorityPubkey;
 
-      // Create transaction instruction manually since IDL parsing failed
-      // Format: discriminator (8 bytes) + did + metadataUri + recoveryKeys (fixed array of 5 pubkeys)
-      const instructionData = Buffer.concat([
-        Buffer.from([12, 253, 209, 41, 176, 51, 195, 179]), // discriminator for create_identity
-        Buffer.from(new Uint8Array([did.length])),
-        Buffer.from(did, 'utf-8'),
-        Buffer.from(new Uint8Array([metadataUri.length])),
-        Buffer.from(metadataUri, 'utf-8'),
-        // Recovery keys as fixed array of 5 pubkeys (32 bytes each)
-        ...recoveryPubkeys.map(key => key.toBuffer()),
-        // Pad with empty pubkeys if less than 5
-        ...Array(Math.max(0, 5 - recoveryPubkeys.length)).fill(Buffer.alloc(32))
-      ]);
-
-      const instruction = {
-        keys: [
-          { pubkey: identityPDA, isSigner: false, isWritable: true },
-          { pubkey: signerKeypair.publicKey, isSigner: true, isWritable: true },
-          { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
-        ],
-        programId: this.programIds.identityRegistry,
-        data: instructionData,
-      };
-
-      const transaction = new Transaction().add(instruction);
-      transaction.recentBlockhash = (await this._connection.getRecentBlockhash()).blockhash;
-      transaction.feePayer = signerKeypair.publicKey;
-
-      // Sign with the admin keypair
-      transaction.sign(signerKeypair);
-
-      // Send transaction
-      const tx = await this._connection.sendRawTransaction(transaction.serialize());
-
-      console.log(`✅ Identity created successfully: ${tx}`);
-      return tx; // Real transaction signature
+      return tx.serialize({ requireAllSignatures: false }).toString('base64');
     } catch (error) {
-      console.error('❌ Error creating identity account:', error);
+      console.error('❌ Error preparing identity transaction:', error);
       throw error;
     }
   }
