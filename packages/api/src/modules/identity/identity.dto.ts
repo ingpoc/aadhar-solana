@@ -32,9 +32,10 @@ export class PrepareTransactionDto {
 }
 
 export class CreateIdentityDto extends PrepareTransactionDto {
-  @ApiProperty({ description: 'Signed transaction (base64 encoded)' })
-  @IsString()
-  signedTransaction: string;
+   @ApiProperty({ description: 'Signed transaction (base64 encoded)', required: false })
+   @IsOptional()
+   @IsString()
+   signedTransaction?: string;
 }
 
 export class UpdateIdentityDto {
