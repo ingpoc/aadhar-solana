@@ -10,6 +10,7 @@ import { DatabaseService } from './services/database.service';
 import { SolanaService } from './services/solana.service';
 import { CacheService } from './services/cache.service';
 import { ApiSetuService } from './services/api-setu.service';
+import { EncryptionService } from './services/encryption.service';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ApiSetuService } from './services/api-setu.service';
     StakingModule,
     HealthModule,
   ],
-  providers: [DatabaseService, SolanaService, CacheService, ApiSetuService],
+  providers: [DatabaseService, SolanaService, CacheService, ApiSetuService, EncryptionService],
+  exports: [EncryptionService],
 })
 export class AppModule {}

@@ -1,35 +1,70 @@
 use anchor_lang::prelude::*;
 
 pub const MAX_DID_LEN: usize = 128;
-pub const MAX_URI_LEN: usize = 256;
 pub const MAX_RECOVERY_KEYS: usize = 5;
+pub const MAX_ENCRYPTED_NAME: usize = 128;
+pub const MAX_ENCRYPTED_DOB: usize = 64;
+pub const MAX_ENCRYPTED_GENDER: usize = 32;
+pub const MAX_ENCRYPTED_MOBILE: usize = 64;
+pub const MAX_ENCRYPTED_EMAIL: usize = 128;
+pub const MAX_ENCRYPTED_ADDRESS: usize = 512;
 
 #[account]
 pub struct IdentityAccount {
-    pub authority: Pubkey,           // 32
-    pub did: String,                 // 4 + 128
-    pub verification_bitmap: u64,    // 8
-    pub reputation_score: u64,       // 8
-    pub staked_amount: u64,          // 8
-    pub created_at: i64,             // 8
-    pub last_updated: i64,           // 8
-    pub metadata_uri: String,        // 4 + 256
-    pub recovery_keys: Vec<Pubkey>,  // 4 + (5 * 32)
-    pub bump: u8,                    // 1
+    pub authority: Pubkey,
+    pub did: String,
+
+    pub aadhaar_hash: [u8; 32],
+    pub aadhaar_last4: String,
+    pub name_encrypted: Vec<u8>,
+    pub dob_encrypted: Vec<u8>,
+    pub gender_encrypted: Vec<u8>,
+    pub mobile_encrypted: Vec<u8>,
+    pub email_encrypted: Vec<u8>,
+    pub address_full_encrypted: Vec<u8>,
+    pub photo_hash: [u8; 32],
+
+    pub age_commitment: [u8; 32],
+    pub gender_commitment: [u8; 32],
+
+    pub aadhaar_verified_at: i64,
+    pub aadhaar_expires_at: i64,
+    pub oracle_signature: [u8; 64],
+
+    pub verification_bitmap: u64,
+    pub reputation_score: u64,
+    pub staked_amount: u64,
+    pub created_at: i64,
+    pub last_updated: i64,
+    pub recovery_keys: Vec<Pubkey>,
+    pub bump: u8,
 }
 
 impl IdentityAccount {
-    pub const LEN: usize = 8 +   // discriminator
-        32 +                      // authority
-        4 + MAX_DID_LEN +         // did (String)
-        8 +                       // verification_bitmap
-        8 +                       // reputation_score
-        8 +                       // staked_amount
-        8 +                       // created_at
-        8 +                       // last_updated
-        4 + MAX_URI_LEN +         // metadata_uri (String)
-        4 + (MAX_RECOVERY_KEYS * 32) + // recovery_keys (Vec<Pubkey>)
-        1;                        // bump
+    pub const LEN: usize = 8 +
+        32 +
+        4 + MAX_DID_LEN +
+        32 +
+        4 + 4 +
+        4 + MAX_ENCRYPTED_NAME +
+        4 + MAX_ENCRYPTED_DOB +
+        4 + MAX_ENCRYPTED_GENDER +
+        4 + MAX_ENCRYPTED_MOBILE +
+        4 + MAX_ENCRYPTED_EMAIL +
+        4 + MAX_ENCRYPTED_ADDRESS +
+        32 +
+        32 +
+        32 +
+        8 +
+        8 +
+        64 +
+        8 +
+        8 +
+        8 +
+        8 +
+        8 +
+        4 + (MAX_RECOVERY_KEYS * 32) +
+        1;
 }
 
 #[account]

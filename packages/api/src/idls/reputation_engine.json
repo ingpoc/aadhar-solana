@@ -1,0 +1,155 @@
+{
+  "version": "0.1.0",
+  "name": "reputation_engine",
+  "instructions": [
+    {
+      "name": "record_action",
+      "accounts": [
+        {
+          "name": "reputation_account",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "system_program",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "identity_pubkey",
+          "type": "publicKey"
+        },
+        {
+          "name": "action_type",
+          "type": "string"
+        },
+        {
+          "name": "action_weight",
+          "type": "u64"
+        },
+        {
+          "name": "metadata_uri",
+          "type": "string"
+        }
+      ],
+      "discriminator": [
+        153,
+        153,
+        235,
+        171,
+        52,
+        54,
+        196,
+        145
+      ]
+    },
+    {
+      "name": "calculate_reputation",
+      "accounts": [
+        {
+          "name": "reputation_account",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "new_score",
+          "type": "u64"
+        }
+      ],
+      "discriminator": [
+        172,
+        112,
+        61,
+        123,
+        245,
+        2,
+        110,
+        226
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "ReputationAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "identity_pubkey",
+            "type": "publicKey"
+          },
+          {
+            "name": "current_score",
+            "type": "u64"
+          },
+          {
+            "name": "total_actions",
+            "type": "u64"
+          },
+          {
+            "name": "last_action_at",
+            "type": "i64"
+          },
+          {
+            "name": "action_history",
+            "type": {
+              "vec": {
+                "defined": "ActionRecord"
+              }
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      },
+      "discriminator": [
+        19,
+        185,
+        177,
+        157,
+        34,
+        87,
+        67,
+        233
+      ]
+    }
+  ],
+  "types": [
+    {
+      "name": "ActionRecord",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "action_type",
+            "type": "string"
+          },
+          {
+            "name": "weight",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "metadata_uri",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ],
+  "address": "27mcyzQMfRAf1Y2z9T9cf4DaViEa6Kqc4czwJM1PPonH"
+}

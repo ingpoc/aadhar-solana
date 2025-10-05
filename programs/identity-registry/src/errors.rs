@@ -28,4 +28,10 @@ pub enum IdentityError {
 
     #[msg("Unauthorized reputation engine - signer does not match config")]
     UnauthorizedReputationEngine,
+
+    #[msg("Invalid Aadhaar last 4 digits (must be exactly 4 characters)")]
+    InvalidAadhaarLast4,
+
+    #[msg("Encrypted data exceeds maximum allowed size")]
+    EncryptedDataTooLarge,
 }

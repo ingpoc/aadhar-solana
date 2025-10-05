@@ -19,7 +19,7 @@ export class IdentityMetadataDto {
   phone?: string;
 }
 
-export class CreateIdentityDto {
+export class PrepareTransactionDto {
   @ApiProperty({ description: 'Solana public key' })
   @IsString()
   publicKey: string;
@@ -29,7 +29,9 @@ export class CreateIdentityDto {
   @ValidateNested()
   @Type(() => IdentityMetadataDto)
   metadata?: IdentityMetadataDto;
+}
 
+export class CreateIdentityDto extends PrepareTransactionDto {
   @ApiProperty({ description: 'Signed transaction (base64 encoded)' })
   @IsString()
   signedTransaction: string;

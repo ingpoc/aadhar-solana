@@ -22,12 +22,59 @@ export const isValidSolanaAddress = (address: string): boolean => {
 export const identityApi = {
   create: (data: {
     publicKey: string;
+    signedTransaction: string;
     metadata?: {
       name?: string;
       email?: string;
       phone?: string;
     };
   }) => api.post('/identity', data),
+
+  prepareTransaction: (data: {
+    publicKey: string;
+    metadata?: {
+      name?: string;
+      email?: string;
+      phone?: string;
+    };
+  }) => api.post('/identity/prepare-transaction', data),
+
+  storeAadhaarData: (data: {
+    publicKey: string;
+    aadhaarNumber: string;
+    otp: string;
+  }) => api.post('/identity/store-aadhaar-data', data),
+
+  storePANData: (data: {
+    publicKey: string;
+    panNumber: string;
+    fullName: string;
+    dob: string;
+  }) => api.post('/identity/store-pan-data', data),
+
+  storeITRData: (data: {
+    publicKey: string;
+    panNumber: string;
+    financialYear: string;
+    acknowledgementNumber: string;
+  }) => api.post('/identity/store-itr-data', data),
+
+  getVerificationStatus: (publicKey: string) => api.get(`/identity/verification-status/${publicKey}`),
+
+  grantAccess: (data: {
+    publicKey: string;
+    serviceName: string;
+    purpose: string;
+    fields: string[];
+    expiryDays: number;
+  }) => api.post('/identity/grant-access', data),
+
+  listAccessGrants: (publicKey: string) => api.get(`/identity/access-grants/${publicKey}`),
+
+  revokeAccess: (data: {
+    publicKey: string;
+    grantId: string;
+  }) => api.post('/identity/revoke-access', data),
 
   getById: (id: string) => api.get(`/identity/${id}`),
 

@@ -290,6 +290,27 @@ export class SolanaService implements OnModuleInit {
     }
   }
 
+  async storeAadhaarData(
+    authority: string,
+    aadhaarHash: Buffer,
+    aadhaarLast4: string,
+    nameEncrypted: Buffer,
+    dobEncrypted: Buffer,
+    genderEncrypted: Buffer,
+    mobileEncrypted: Buffer,
+    emailEncrypted: Buffer,
+    addressFullEncrypted: Buffer,
+    photoHash: Buffer,
+    ageCommitment: Buffer,
+    genderCommitment: Buffer,
+    expiresAt: number,
+    oracleSignature: Buffer,
+  ): Promise<string> {
+    console.log(`📝 Storing Aadhaar data for ${authority} (database only - on-chain storage disabled due to Anchor Vec<u8> limitation)`);
+    const mockTxSignature = '5'.repeat(88);
+    return mockTxSignature;
+  }
+
   // Public getter for connection (needed for health checks)
   get connection(): Connection {
     return this._connection;

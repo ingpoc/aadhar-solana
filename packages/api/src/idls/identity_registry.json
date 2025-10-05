@@ -1,0 +1,352 @@
+{
+  "version": "0.1.0",
+  "name": "identity_registry",
+  "instructions": [
+    {
+      "name": "initialize_config",
+      "accounts": [
+        {
+          "name": "config",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "verificationOracle",
+          "type": "publicKey"
+        },
+        {
+          "name": "credentialManager",
+          "type": "publicKey"
+        },
+        {
+          "name": "reputationEngine",
+          "type": "publicKey"
+        },
+        {
+          "name": "stakingManager",
+          "type": "publicKey"
+        }
+      ],
+      "discriminator": [
+        208,
+        127,
+        21,
+        1,
+        194,
+        190,
+        196,
+        70
+      ]
+    },
+    {
+      "name": "create_identity",
+      "accounts": [
+        {
+          "name": "identityAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "did",
+          "type": "string"
+        },
+        {
+          "name": "metadataUri",
+          "type": "string"
+        },
+        {
+          "name": "recoveryKeys",
+          "type": {
+            "vec": "publicKey"
+          }
+        }
+      ],
+      "discriminator": [
+        12,
+        253,
+        209,
+        41,
+        176,
+        51,
+        195,
+        179
+      ]
+    },
+    {
+      "name": "update_verification_status",
+      "accounts": [
+        {
+          "name": "identityAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "oracle",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "config",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "verificationType",
+          "type": "u8"
+        },
+        {
+          "name": "verified",
+          "type": "bool"
+        }
+      ],
+      "discriminator": [
+        98,
+        145,
+        244,
+        162,
+        212,
+        244,
+        201,
+        233
+      ]
+    },
+    {
+      "name": "update_reputation",
+      "accounts": [
+        {
+          "name": "identityAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reputationEngine",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "config",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "newScore",
+          "type": "u64"
+        }
+      ],
+      "discriminator": [
+        194,
+        220,
+        43,
+        201,
+        54,
+        209,
+        49,
+        178
+      ]
+    },
+    {
+      "name": "add_recovery_key",
+      "accounts": [
+        {
+          "name": "identityAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "recoveryKey",
+          "type": "publicKey"
+        }
+      ],
+      "discriminator": [
+        15,
+        0,
+        205,
+        162,
+        112,
+        187,
+        101,
+        73
+      ]
+    },
+    {
+      "name": "recover_identity",
+      "accounts": [
+        {
+          "name": "identityAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "recoverySigner",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "newAuthority",
+          "type": "publicKey"
+        }
+      ],
+      "discriminator": [
+        236,
+        190,
+        126,
+        192,
+        28,
+        163,
+        102,
+        116
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "IdentityAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "did",
+            "type": "string"
+          },
+          {
+            "name": "verificationBitmap",
+            "type": "u64"
+          },
+          {
+            "name": "reputationScore",
+            "type": "u64"
+          },
+          {
+            "name": "stakedAmount",
+            "type": "u64"
+          },
+          {
+            "name": "createdAt",
+            "type": "i64"
+          },
+          {
+            "name": "lastUpdated",
+            "type": "i64"
+          },
+          {
+            "name": "metadataUri",
+            "type": "string"
+          },
+          {
+            "name": "recoveryKeys",
+            "type": {
+              "vec": {
+                "array": [
+                  "publicKey",
+                  5
+                ]
+              }
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      },
+      "discriminator": [
+        194,
+        90,
+        181,
+        160,
+        182,
+        206,
+        116,
+        158
+      ]
+    },
+    {
+      "name": "GlobalConfig",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "publicKey"
+          },
+          {
+            "name": "verificationOracle",
+            "type": "publicKey"
+          },
+          {
+            "name": "credentialManager",
+            "type": "publicKey"
+          },
+          {
+            "name": "reputationEngine",
+            "type": "publicKey"
+          },
+          {
+            "name": "stakingManager",
+            "type": "publicKey"
+          },
+          {
+            "name": "minStakeAmount",
+            "type": "u64"
+          },
+          {
+            "name": "verificationFee",
+            "type": "u64"
+          }
+        ]
+      },
+      "discriminator": [
+        149,
+        8,
+        156,
+        202,
+        160,
+        252,
+        176,
+        217
+      ]
+    }
+  ],
+  "address": "9cDgdU4VnziNnBzDbWx7yTEhJsiDk27HbcYwUTmTTF6n"
+}

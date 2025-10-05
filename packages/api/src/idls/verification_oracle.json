@@ -1,0 +1,144 @@
+{
+  "version": "0.1.0",
+  "name": "verification_oracle",
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [],
+      "args": [],
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ]
+    },
+    {
+      "name": "submit_verification_proof",
+      "accounts": [
+        {
+          "name": "verification_proof",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "oracle_authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "system_program",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "identity_pubkey",
+          "type": "publicKey"
+        },
+        {
+          "name": "verification_type",
+          "type": "u8"
+        },
+        {
+          "name": "proof_hash",
+          "type": "string"
+        },
+        {
+          "name": "metadata_uri",
+          "type": "string"
+        }
+      ],
+      "discriminator": [
+        107,
+        235,
+        200,
+        54,
+        25,
+        141,
+        210,
+        205
+      ]
+    },
+    {
+      "name": "verify_proof",
+      "accounts": [
+        {
+          "name": "verification_proof",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "expected_proof_hash",
+          "type": "string"
+        }
+      ],
+      "discriminator": [
+        217,
+        211,
+        191,
+        110,
+        144,
+        13,
+        186,
+        98
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "VerificationProof",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "identity_pubkey",
+            "type": "publicKey"
+          },
+          {
+            "name": "verification_type",
+            "type": "u8"
+          },
+          {
+            "name": "proof_hash",
+            "type": "string"
+          },
+          {
+            "name": "metadata_uri",
+            "type": "string"
+          },
+          {
+            "name": "submitted_at",
+            "type": "i64"
+          },
+          {
+            "name": "is_verified",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      },
+      "discriminator": [
+        173,
+        117,
+        59,
+        248,
+        202,
+        158,
+        93,
+        232
+      ]
+    }
+  ],
+  "address": "3zNSrpqKKd7Bdsq1JJeVwPyddt9jCcP6Eg9xMgbZtziY"
+}
