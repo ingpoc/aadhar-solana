@@ -6,6 +6,10 @@ import { CredentialsModule } from './modules/credentials/credentials.module';
 import { ReputationModule } from './modules/reputation/reputation.module';
 import { StakingModule } from './modules/staking/staking.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ConsentModule } from './modules/consent/consent.module';
+import { DataRightsModule } from './modules/data-rights/data-rights.module';
+import { AadhaarModule } from './modules/aadhaar/aadhaar.module';
+import { PrivacyModule } from './modules/privacy/privacy.module';
 import { EncryptionModule } from './common/crypto/encryption.module';
 import { DatabaseService } from './services/database.service';
 import { SolanaService } from './services/solana.service';
@@ -28,6 +32,11 @@ import configuration from './config/configuration';
     CredentialsModule,
     ReputationModule,
     StakingModule,
+    // Phase 2: Regulatory Compliance Modules
+    ConsentModule,
+    DataRightsModule,
+    AadhaarModule,
+    PrivacyModule,
   ],
   providers: [
     DatabaseService,
