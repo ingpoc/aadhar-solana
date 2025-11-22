@@ -2,10 +2,17 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import helmet from 'helmet';
+import hpp from 'hpp';
 import { AppModule } from './app.module';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import {
+  SecurityMiddleware,
+  RequestIdMiddleware,
+  IpExtractionMiddleware,
+} from './common/middleware/security.middleware';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
@@ -18,12 +25,54 @@ async function bootstrap() {
   const corsOrigin = configService.get<string>('corsOrigin') || '*';
   const enableSwagger = configService.get('features.enableSwagger') !== false;
 
-  // CORS
+  // Security middleware - Helmet for security headers
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          styleSrc: ["'self'", "'unsafe-inline'"], // For Swagger UI
+          scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"], // For Swagger UI
+          imgSrc: ["'self'", 'data:', 'https:'],
+          connectSrc: ["'self'"],
+          fontSrc: ["'self'", 'https:', 'data:'],
+          objectSrc: ["'none'"],
+          mediaSrc: ["'self'"],
+          frameSrc: ["'none'"],
+        },
+      },
+      crossOriginEmbedderPolicy: false, // Required for some API integrations
+      hsts: {
+        maxAge: 31536000,
+        includeSubDomains: true,
+        preload: true,
+      },
+    }),
+  );
+
+  // HTTP Parameter Pollution protection
+  app.use(hpp());
+
+  // Apply custom security middleware
+  const securityMiddleware = new SecurityMiddleware();
+  const requestIdMiddleware = new RequestIdMiddleware();
+  const ipExtractionMiddleware = new IpExtractionMiddleware();
+
+  app.use((req: any, res: any, next: any) => requestIdMiddleware.use(req, res, next));
+  app.use((req: any, res: any, next: any) => ipExtractionMiddleware.use(req, res, next));
+  app.use((req: any, res: any, next: any) => securityMiddleware.use(req, res, next));
+
+  // CORS - Production-ready configuration
+  const isProduction = configService.get('nodeEnv') === 'production';
   app.enableCors({
-    origin: corsOrigin,
+    origin: isProduction
+      ? corsOrigin.split(',').map((o: string) => o.trim())
+      : corsOrigin === '*' ? true : corsOrigin,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-ID', 'X-API-Key'],
+    exposedHeaders: ['X-Request-ID'],
+    maxAge: 600, // Cache preflight requests for 10 minutes
   });
 
   // Global prefix

@@ -18,3 +18,11 @@ export type { ReputationScore, ReputationEvent } from './reputationService';
 
 export { biometricService } from './biometricService';
 export type { BiometricCapabilities, AuthenticationResult } from './biometricService';
+
+export { livenessService } from './livenessService';
+export type {
+  LivenessResult,
+  ChallengeResult,
+  LivenessConfig,
+} from './livenessService';
+export { LivenessChallenge, LivenessErrorCode } from './livenessService';

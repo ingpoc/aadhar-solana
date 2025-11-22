@@ -150,23 +150,26 @@ model ApiKey {
 // ============== Audit & Compliance ==============
 
 model AuditLog {
-  id          String   @id @default(uuid())
-  userId      String?  @map("user_id")
-  action      String
-  resource    String
-  resourceId  String?  @map("resource_id")
-  ipAddress   String?  @map("ip_address")
-  userAgent   String?  @map("user_agent")
-  requestId   String?  @map("request_id")
-  metadata    Json?
-  status      String   @default("success")
-  errorMessage String? @map("error_message")
-  createdAt   DateTime @default(now()) @map("created_at")
+  id           String   @id @default(uuid())
+  userId       String?  @map("user_id")
+  action       String
+  resource     String
+  resourceId   String?  @map("resource_id")
+  ipAddress    String?  @map("ip_address")
+  userAgent    String?  @map("user_agent")
+  requestId    String?  @map("request_id")
+  metadata     Json?
+  status       String   @default("success")
+  errorMessage String?  @map("error_message")
+  hash         String?  // HMAC-SHA256 hash for tamper detection
+  previousHash String?  @map("previous_hash") // Chain linkage
+  createdAt    DateTime @default(now()) @map("created_at")
 
   @@index([userId])
   @@index([action])
   @@index([resource])
   @@index([createdAt])
+  @@index([hash])
   @@map("audit_logs")
 }
 
@@ -221,4 +224,41 @@ model RateLimitRecord {
   @@index([identifier])
   @@index([windowEnd])
   @@map("rate_limit_records")
+}
+
+// ============== Encrypted PII Storage ==============
+
+model EncryptedPII {
+  id                    String   @id @default(uuid())
+  identityId            String   @unique @map("identity_id")
+
+  // Hashes for lookup (HMAC-SHA256)
+  aadhaarHash           String?  @unique @map("aadhaar_hash")
+  panHash               String?  @unique @map("pan_hash")
+  phoneHash             String?  @unique @map("phone_hash")
+  emailHash             String?  @unique @map("email_hash")
+
+  // Encrypted fields (AES-256-GCM)
+  aadhaarEncrypted      String?  @map("aadhaar_encrypted")
+  panEncrypted          String?  @map("pan_encrypted")
+  phoneEncrypted        String?  @map("phone_encrypted")
+  emailEncrypted        String?  @map("email_encrypted")
+  fullNameEncrypted     String?  @map("full_name_encrypted")
+  dateOfBirthEncrypted  String?  @map("date_of_birth_encrypted")
+  addressEncrypted      String?  @map("address_encrypted")
+
+  // Key management
+  encryptionKeyId       String   @map("encryption_key_id")
+  keyVersion            Int      @default(1) @map("key_version")
+
+  // Timestamps
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  @@index([aadhaarHash])
+  @@index([panHash])
+  @@index([phoneHash])
+  @@index([emailHash])
+  @@index([encryptionKeyId])
+  @@map("encrypted_pii")
 }

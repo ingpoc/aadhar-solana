@@ -6,6 +6,7 @@ import { CredentialsModule } from './modules/credentials/credentials.module';
 import { ReputationModule } from './modules/reputation/reputation.module';
 import { StakingModule } from './modules/staking/staking.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { EncryptionModule } from './common/crypto/encryption.module';
 import { DatabaseService } from './services/database.service';
 import { SolanaService } from './services/solana.service';
 import { CacheService } from './services/cache.service';
@@ -20,6 +21,7 @@ import configuration from './config/configuration';
       load: [configuration],
       envFilePath: ['.env.local', '.env'],
     }),
+    EncryptionModule,
     AuthModule,
     IdentityModule,
     VerificationModule,
