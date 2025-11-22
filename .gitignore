@@ -75,7 +75,9 @@ target/
 **/test-ledger/
 solana-program-library/
 .anchor/
+# Ignore app/ except Next.js app directory
 app/
+!packages/web/app/
 anchor-debug-logs
 
 # Mobile

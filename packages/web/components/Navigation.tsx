@@ -18,6 +18,8 @@ export function Navigation() {
     { name: 'Credentials', href: '/credentials', requiresWallet: true },
     { name: 'Reputation', href: '/reputation', requiresWallet: true },
     { name: 'Staking', href: '/staking', requiresWallet: true },
+    { name: 'Consent', href: '/consent', requiresWallet: true },
+    { name: 'Data Rights', href: '/data-rights', requiresWallet: true },
   ];
 
   const filteredNavigation = navigation.filter(

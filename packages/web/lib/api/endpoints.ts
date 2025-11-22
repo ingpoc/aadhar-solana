@@ -199,3 +199,202 @@ export const stakingApi = {
   getPool: () =>
     api.get<{ totalStaked: string; rewardRate: number; minStake: string }>('/staking/pool'),
 };
+
+// Consent API (DPDP Act)
+export interface ConsentPurposeResponse {
+  type: string;
+  name: string;
+  description: string;
+  dataElements: string[];
+  required: boolean;
+  retentionPeriod: string;
+  thirdParties: string[];
+}
+
+export interface ConsentRecordResponse {
+  id: string;
+  userId: string;
+  consentType: string;
+  purpose: string;
+  dataElements: string[];
+  status: string;
+  grantedAt: string;
+  expiresAt?: string;
+  revokedAt?: string;
+  revokedReason?: string;
+  version: string;
+  consentArtifact?: string;
+}
+
+export const consentApi = {
+  getPurposes: () =>
+    api.get<ConsentPurposeResponse[]>('/consent/purposes'),
+
+  getAll: (params?: { status?: string; type?: string }) =>
+    api.get<ConsentRecordResponse[]>('/consent', { params }),
+
+  checkConsent: (type: string) =>
+    api.get<{ hasConsent: boolean; consent?: ConsentRecordResponse }>(`/consent/check/${type}`),
+
+  grantConsent: (data: {
+    consentType: string;
+    purpose?: string;
+    dataElements?: string[];
+    expiresInDays?: number;
+  }) => api.post<ConsentRecordResponse>('/consent/grant', data),
+
+  revokeConsent: (consentId: string, reason?: string) =>
+    api.delete<ConsentRecordResponse>(`/consent/${consentId}`, { data: { reason } }),
+
+  getReceipt: (consentId: string) =>
+    api.get<{ receipt: string }>(`/consent/${consentId}/receipt`),
+};
+
+// Data Rights API (DPDP Act)
+export interface DataRightsRequestResponse {
+  id: string;
+  userId: string;
+  requestType: string;
+  status: string;
+  dataCategories: string[];
+  reason?: string;
+  deadline: string;
+  processedAt?: string;
+  processedBy?: string;
+  responseData?: Record<string, unknown>;
+  exportFormat?: string;
+  exportFileUrl?: string;
+  correctionField?: string;
+  correctionOldValue?: string;
+  correctionNewValue?: string;
+  grievanceCategory?: string;
+  grievanceDetails?: string;
+  grievanceResponse?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export const dataRightsApi = {
+  submitAccessRequest: (data: {
+    dataCategories: string[];
+    reason?: string;
+  }) => api.post<DataRightsRequestResponse>('/data-rights/access', data),
+
+  submitErasureRequest: (data: {
+    dataCategories: string[];
+    reason: string;
+    confirmation: boolean;
+  }) => api.post<DataRightsRequestResponse>('/data-rights/erasure', data),
+
+  submitCorrectionRequest: (data: {
+    field: string;
+    currentValue: string;
+    correctedValue: string;
+    reason: string;
+    supportingDocuments?: string[];
+  }) => api.post<DataRightsRequestResponse>('/data-rights/correction', data),
+
+  submitPortabilityRequest: (data: {
+    dataCategories: string[];
+    format: 'json' | 'csv' | 'xml';
+  }) => api.post<DataRightsRequestResponse>('/data-rights/portability', data),
+
+  submitGrievance: (data: {
+    category: string;
+    subject: string;
+    description: string;
+    previousRequestId?: string;
+  }) => api.post<DataRightsRequestResponse>('/data-rights/grievance', data),
+
+  getRequests: (params?: { status?: string; type?: string; page?: number; limit?: number }) =>
+    api.get<{ items: DataRightsRequestResponse[]; total: number }>('/data-rights/requests', { params }),
+
+  getRequestById: (id: string) =>
+    api.get<DataRightsRequestResponse>(`/data-rights/requests/${id}`),
+
+  downloadExport: (requestId: string) =>
+    api.get<Blob>(`/data-rights/export/${requestId}`, { responseType: 'blob' }),
+
+  cancelRequest: (id: string) =>
+    api.post<DataRightsRequestResponse>(`/data-rights/requests/${id}/cancel`),
+};
+
+// Privacy API
+export interface PrivacyNoticeResponse {
+  id: string;
+  version: string;
+  effectiveDate: string;
+  content: {
+    summary: string;
+    fullText: string;
+    dataCollected: string[];
+    purposes: string[];
+    retentionPeriods: Record<string, string>;
+    thirdParties: string[];
+    rights: string[];
+    contact: {
+      dpo: string;
+      email: string;
+      address: string;
+    };
+  };
+  isActive: boolean;
+}
+
+export const privacyApi = {
+  getCurrentNotice: () =>
+    api.get<PrivacyNoticeResponse>('/privacy/notice/current'),
+
+  acknowledgeNotice: (noticeId: string) =>
+    api.post('/privacy/notice/acknowledge', { noticeId }),
+
+  hasAcknowledged: () =>
+    api.get<{ acknowledged: boolean; notice?: PrivacyNoticeResponse }>('/privacy/notice/status'),
+
+  getNoticeHistory: () =>
+    api.get<PrivacyNoticeResponse[]>('/privacy/notice/history'),
+};
+
+// Activity & Audit API
+export interface ActivityLogResponse {
+  id: string;
+  action: string;
+  resource: string;
+  resourceId?: string;
+  timestamp: string;
+  ipAddress?: string;
+  metadata?: Record<string, unknown>;
+}
+
+export interface AuditLogResponse {
+  id: string;
+  userId: string;
+  action: string;
+  resource: string;
+  resourceId?: string;
+  timestamp: string;
+  ipAddress?: string;
+  status: string;
+  metadata?: Record<string, unknown>;
+  hash: string;
+}
+
+export const activityApi = {
+  getRecentActivity: (params?: { limit?: number }) =>
+    api.get<ActivityLogResponse[]>('/activity/recent', { params }),
+
+  getAuditLogs: (params?: {
+    action?: string;
+    resource?: string;
+    startDate?: string;
+    endDate?: string;
+    page?: number;
+    limit?: number;
+  }) => api.get<{ items: AuditLogResponse[]; total: number }>('/activity/audit', { params }),
+
+  exportAuditLogs: (params: {
+    startDate: string;
+    endDate: string;
+    format: 'json' | 'csv';
+  }) => api.get<Blob>('/activity/audit/export', { params, responseType: 'blob' }),
+};
