@@ -22,4 +22,13 @@ pub enum IdentityError {
 
     #[msg("Account not found")]
     AccountNotFound,
+
+    #[msg("Unauthorized: Only verification oracle can update verification status")]
+    UnauthorizedOracle,
+
+    #[msg("Unauthorized: Only reputation engine can update reputation")]
+    UnauthorizedReputationEngine,
+
+    #[msg("Unauthorized: Only staking manager can update staked amount")]
+    UnauthorizedStakingManager,
 }

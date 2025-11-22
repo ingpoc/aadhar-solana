@@ -19,3 +19,5 @@ default = []
 [dependencies]
 anchor-lang = "0.29.0"
 anchor-spl = "0.29.0"
+identity-registry = { path = "../identity-registry", features = ["cpi"] }
+staking-manager = { path = "../staking-manager", features = ["cpi"] }
