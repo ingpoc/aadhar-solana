@@ -18,11 +18,21 @@ export function Navigation() {
     { name: 'Credentials', href: '/credentials', requiresWallet: true },
     { name: 'Reputation', href: '/reputation', requiresWallet: true },
     { name: 'Staking', href: '/staking', requiresWallet: true },
+  ];
+
+  const complianceNav = [
     { name: 'Consent', href: '/consent', requiresWallet: true },
     { name: 'Data Rights', href: '/data-rights', requiresWallet: true },
+    { name: 'Privacy', href: '/privacy', requiresWallet: true },
+    { name: 'Activity', href: '/activity', requiresWallet: true },
+    { name: 'Settings', href: '/settings', requiresWallet: true },
   ];
 
   const filteredNavigation = navigation.filter(
+    (item) => !item.requiresWallet || connected
+  );
+
+  const filteredComplianceNav = complianceNav.filter(
     (item) => !item.requiresWallet || connected
   );
 
@@ -104,6 +114,28 @@ export function Navigation() {
                   {item.name}
                 </Link>
               ))}
+              {filteredComplianceNav.length > 0 && (
+                <>
+                  <div className="border-t border-neutral-200 my-2" />
+                  <span className="px-4 text-xs text-gray-500 uppercase tracking-wider">
+                    Compliance & Settings
+                  </span>
+                  {filteredComplianceNav.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                        pathname === item.href
+                          ? 'bg-primary-light/10 text-primary'
+                          : 'text-neutral-600 hover:bg-neutral-100'
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </>
+              )}
             </div>
           </div>
         )}
