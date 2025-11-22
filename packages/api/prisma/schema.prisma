@@ -98,13 +98,127 @@ model ReputationHistory {
 }
 
 model StakeAccount {
-  id         String    @id @default(uuid())
-  identityId String    @map("identity_id")
-  amount     BigInt
-  stakedAt   DateTime  @default(now()) @map("staked_at")
-  unlockTime DateTime? @map("unlock_time")
-  status     String    @default("active")
+  id              String    @id @default(uuid())
+  identityId      String    @map("identity_id")
+  solanaAddress   String?   @unique @map("solana_address")
+  amount          BigInt
+  pendingRewards  BigInt    @default(0) @map("pending_rewards")
+  stakedAt        DateTime  @default(now()) @map("staked_at")
+  unlockTime      DateTime? @map("unlock_time")
+  unstakeRequested DateTime? @map("unstake_requested")
+  status          String    @default("active")
 
   @@index([identityId])
   @@map("stake_accounts")
+}
+
+// ============== Authentication & Security ==============
+
+model RefreshToken {
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  token       String    @unique
+  deviceInfo  String?   @map("device_info")
+  ipAddress   String?   @map("ip_address")
+  expiresAt   DateTime  @map("expires_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  revokedAt   DateTime? @map("revoked_at")
+  isRevoked   Boolean   @default(false) @map("is_revoked")
+
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
+
+model ApiKey {
+  id          String    @id @default(uuid())
+  name        String
+  keyHash     String    @unique @map("key_hash")
+  userId      String?   @map("user_id")
+  permissions String[]  @default([])
+  rateLimit   Int       @default(1000) @map("rate_limit")
+  lastUsedAt  DateTime? @map("last_used_at")
+  expiresAt   DateTime? @map("expires_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  isActive    Boolean   @default(true) @map("is_active")
+
+  @@index([keyHash])
+  @@map("api_keys")
+}
+
+// ============== Audit & Compliance ==============
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  userId      String?  @map("user_id")
+  action      String
+  resource    String
+  resourceId  String?  @map("resource_id")
+  ipAddress   String?  @map("ip_address")
+  userAgent   String?  @map("user_agent")
+  requestId   String?  @map("request_id")
+  metadata    Json?
+  status      String   @default("success")
+  errorMessage String? @map("error_message")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([action])
+  @@index([resource])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model Consent {
+  id              String    @id @default(uuid())
+  identityId      String    @map("identity_id")
+  consentType     String    @map("consent_type")
+  purpose         String
+  dataElements    String[]  @map("data_elements")
+  consentArtifact String?   @map("consent_artifact")
+  grantedAt       DateTime  @default(now()) @map("granted_at")
+  expiresAt       DateTime? @map("expires_at")
+  revokedAt       DateTime? @map("revoked_at")
+  isActive        Boolean   @default(true) @map("is_active")
+
+  @@index([identityId])
+  @@index([consentType])
+  @@map("consents")
+}
+
+// ============== Oracle Network ==============
+
+model OracleNode {
+  id                    String    @id @default(uuid())
+  solanaAddress         String    @unique @map("solana_address")
+  operatorName          String    @map("operator_name")
+  stakeAmount           BigInt    @map("stake_amount")
+  status                String    @default("active")
+  verificationsSubmitted Int      @default(0) @map("verifications_submitted")
+  successfulVerifications Int     @default(0) @map("successful_verifications")
+  failedVerifications   Int       @default(0) @map("failed_verifications")
+  slashCount            Int       @default(0) @map("slash_count")
+  lastActiveAt          DateTime? @map("last_active_at")
+  registeredAt          DateTime  @default(now()) @map("registered_at")
+
+  @@index([solanaAddress])
+  @@index([status])
+  @@map("oracle_nodes")
+}
+
+// ============== Rate Limiting ==============
+
+model RateLimitRecord {
+  id          String   @id @default(uuid())
+  identifier  String   // userId, IP, or API key
+  endpoint    String
+  count       Int      @default(1)
+  windowStart DateTime @map("window_start")
+  windowEnd   DateTime @map("window_end")
+
+  @@unique([identifier, endpoint, windowStart])
+  @@index([identifier])
+  @@index([windowEnd])
+  @@map("rate_limit_records")
 }

@@ -62,6 +62,11 @@ pub mod identity_registry {
         verification_type: u8,
         verified: bool,
     ) -> Result<()> {
+        // Verify caller is the authorized oracle
+        require!(
+            ctx.accounts.oracle.key() == ctx.accounts.config.verification_oracle,
+            errors::IdentityError::UnauthorizedOracle
+        );
         require!(verification_type < 64, errors::IdentityError::InvalidVerificationType);
 
         let identity = &mut ctx.accounts.identity_account;
@@ -75,6 +80,8 @@ pub mod identity_registry {
 
         identity.last_updated = clock.unix_timestamp;
 
+        msg!("Verification status updated: type={}, verified={}", verification_type, verified);
+
         Ok(())
     }
 
@@ -82,11 +89,41 @@ pub mod identity_registry {
         ctx: Context<UpdateReputation>,
         new_score: u64,
     ) -> Result<()> {
+        // Verify caller is the authorized reputation engine
+        require!(
+            ctx.accounts.reputation_engine.key() == ctx.accounts.config.reputation_engine,
+            errors::IdentityError::UnauthorizedReputationEngine
+        );
+
         let identity = &mut ctx.accounts.identity_account;
         let clock = Clock::get()?;
 
         identity.reputation_score = new_score;
         identity.last_updated = clock.unix_timestamp;
+
+        msg!("Reputation updated to {} for {}", new_score, identity.authority);
+
+        Ok(())
+    }
+
+    /// Update staked amount (called by staking manager via CPI)
+    pub fn update_staked_amount(
+        ctx: Context<UpdateStakedAmount>,
+        new_amount: u64,
+    ) -> Result<()> {
+        // Verify caller is the authorized staking manager
+        require!(
+            ctx.accounts.staking_manager.key() == ctx.accounts.config.staking_manager,
+            errors::IdentityError::UnauthorizedStakingManager
+        );
+
+        let identity = &mut ctx.accounts.identity_account;
+        let clock = Clock::get()?;
+
+        identity.staked_amount = new_amount;
+        identity.last_updated = clock.unix_timestamp;
+
+        msg!("Staked amount updated to {} for {}", new_amount, identity.authority);
 
         Ok(())
     }
@@ -212,4 +249,19 @@ pub struct RecoverIdentity<'info> {
     pub identity_account: Account<'info, IdentityAccount>,
 
     pub recovery_signer: Signer<'info>,
+}
+
+#[derive(Accounts)]
+pub struct UpdateStakedAmount<'info> {
+    #[account(
+        mut,
+        seeds = [b"identity", identity_account.authority.as_ref()],
+        bump = identity_account.bump
+    )]
+    pub identity_account: Account<'info, IdentityAccount>,
+
+    pub staking_manager: Signer<'info>,
+
+    #[account(seeds = [b"config"], bump)]
+    pub config: Account<'info, GlobalConfig>,
 }
