@@ -7,6 +7,10 @@
     @apply bg-neutral-50 text-neutral-900 antialiased;
   }
 
+  .dark body {
+    @apply bg-gray-900 text-gray-100;
+  }
+
   h1 {
     @apply text-4xl font-bold;
   }
@@ -29,6 +33,16 @@
 
   h6 {
     @apply text-base font-semibold;
+  }
+
+  /* Dark mode text colors */
+  .dark h1,
+  .dark h2,
+  .dark h3,
+  .dark h4,
+  .dark h5,
+  .dark h6 {
+    @apply text-white;
   }
 }
 
@@ -53,12 +67,24 @@
     @apply btn bg-transparent border-2 border-neutral-300 text-neutral-700 hover:bg-neutral-100 focus:ring-neutral-400;
   }
 
+  .dark .btn-outline {
+    @apply border-gray-600 text-gray-300 hover:bg-gray-800;
+  }
+
   .input {
     @apply w-full px-4 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all;
   }
 
+  .dark .input {
+    @apply bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-400;
+  }
+
   .card {
     @apply bg-white rounded-lg shadow-md p-6 transition-all hover:shadow-lg;
+  }
+
+  .dark .card {
+    @apply bg-gray-800 shadow-gray-900/50;
   }
 
   .badge {
@@ -114,12 +140,24 @@
   @apply bg-neutral-100;
 }
 
+.dark ::-webkit-scrollbar-track {
+  @apply bg-gray-800;
+}
+
 ::-webkit-scrollbar-thumb {
   @apply bg-neutral-400 rounded-full;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-gray-600;
+}
+
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-neutral-500;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500;
 }
 
 /* Animations */
@@ -136,4 +174,13 @@
   animation: shimmer 2s infinite linear;
   background: linear-gradient(to right, #f0f0f0 4%, #e0e0e0 25%, #f0f0f0 36%);
   background-size: 1000px 100%;
+}
+
+.dark .animate-shimmer {
+  background: linear-gradient(to right, #374151 4%, #4b5563 25%, #374151 36%);
+}
+
+/* Focus ring styles for dark mode */
+.dark .focus:ring-offset-2 {
+  --tw-ring-offset-color: #111827;
 }

@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { useState } from 'react';
+import { ThemeToggle } from './ThemeToggle';
 
 export function Navigation() {
   const pathname = usePathname();
@@ -37,7 +38,7 @@ export function Navigation() {
   );
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-40">
+    <nav className="bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900/50 sticky top-0 z-40 transition-colors">
       <div className="container-custom">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -55,24 +56,26 @@ export function Navigation() {
                 className={`text-sm font-medium transition-colors ${
                   pathname === item.href
                     ? 'text-primary border-b-2 border-primary'
-                    : 'text-neutral-600 hover:text-primary'
+                    : 'text-neutral-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-light'
                 }`}
               >
                 {item.name}
               </Link>
             ))}
 
+            <ThemeToggle />
             <WalletMultiButton className="!bg-primary hover:!bg-primary-dark" />
           </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-2">
+            <ThemeToggle />
             <div className="scale-75">
               <WalletMultiButton className="!bg-primary hover:!bg-primary-dark !text-xs" />
             </div>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-neutral-600 hover:text-primary"
+              className="p-2 text-neutral-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-light"
               aria-label="Toggle menu"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -98,7 +101,7 @@ export function Navigation() {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-neutral-200 animate-slide-up">
+          <div className="md:hidden py-4 border-t border-neutral-200 dark:border-gray-700 animate-slide-up">
             <div className="flex flex-col space-y-3">
               {filteredNavigation.map((item) => (
                 <Link
@@ -108,7 +111,7 @@ export function Navigation() {
                   className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                     pathname === item.href
                       ? 'bg-primary-light/10 text-primary'
-                      : 'text-neutral-600 hover:bg-neutral-100'
+                      : 'text-neutral-600 dark:text-gray-300 hover:bg-neutral-100 dark:hover:bg-gray-700'
                   }`}
                 >
                   {item.name}
@@ -116,8 +119,8 @@ export function Navigation() {
               ))}
               {filteredComplianceNav.length > 0 && (
                 <>
-                  <div className="border-t border-neutral-200 my-2" />
-                  <span className="px-4 text-xs text-gray-500 uppercase tracking-wider">
+                  <div className="border-t border-neutral-200 dark:border-gray-700 my-2" />
+                  <span className="px-4 text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Compliance & Settings
                   </span>
                   {filteredComplianceNav.map((item) => (
@@ -128,7 +131,7 @@ export function Navigation() {
                       className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                         pathname === item.href
                           ? 'bg-primary-light/10 text-primary'
-                          : 'text-neutral-600 hover:bg-neutral-100'
+                          : 'text-neutral-600 dark:text-gray-300 hover:bg-neutral-100 dark:hover:bg-gray-700'
                       }`}
                     >
                       {item.name}
