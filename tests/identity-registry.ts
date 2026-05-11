@@ -14,7 +14,7 @@ describe("identity-registry", () => {
   let configBump: number;
   let admin: Keypair;
 
-  const verificationOracle = Keypair.generate().publicKey;
+  const verificationOracle = Keypair.generate();
   const credentialManager = Keypair.generate().publicKey;
   const reputationEngine = Keypair.generate().publicKey;
   const stakingManager = Keypair.generate().publicKey;
@@ -40,7 +40,7 @@ describe("identity-registry", () => {
     it("should initialize the global config", async () => {
       await program.methods
         .initializeConfig(
-          verificationOracle,
+          verificationOracle.publicKey,
           credentialManager,
           reputationEngine,
           stakingManager
@@ -55,7 +55,9 @@ describe("identity-registry", () => {
 
       const config = await program.account.globalConfig.fetch(configPda);
       expect(config.admin.toString()).to.equal(admin.publicKey.toString());
-      expect(config.verificationOracle.toString()).to.equal(verificationOracle.toString());
+      expect(config.verificationOracle.toString()).to.equal(
+        verificationOracle.publicKey.toString()
+      );
       expect(config.credentialManager.toString()).to.equal(credentialManager.toString());
       expect(config.reputationEngine.toString()).to.equal(reputationEngine.toString());
       expect(config.stakingManager.toString()).to.equal(stakingManager.toString());
@@ -143,6 +145,70 @@ describe("identity-registry", () => {
         expect.fail("Should have thrown an error");
       } catch (error: any) {
         expect(error.error.errorCode.code).to.equal("TooManyRecoveryKeys");
+      }
+    });
+  });
+
+  describe("update_verification_status", () => {
+    let user: Keypair;
+    let identityPda: PublicKey;
+
+    before(async () => {
+      user = Keypair.generate();
+
+      const signature = await provider.connection.requestAirdrop(
+        user.publicKey,
+        2 * anchor.web3.LAMPORTS_PER_SOL
+      );
+      await provider.connection.confirmTransaction(signature);
+
+      [identityPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("identity"), user.publicKey.toBuffer()],
+        program.programId
+      );
+
+      await program.methods
+        .createIdentity("did:test:verification", "https://example.com", [])
+        .accounts({
+          identityAccount: identityPda,
+          authority: user.publicKey,
+          systemProgram: SystemProgram.programId,
+        })
+        .signers([user])
+        .rpc();
+    });
+
+    it("should allow the configured verification oracle to update verification status", async () => {
+      await program.methods
+        .updateVerificationStatus(0, true)
+        .accounts({
+          identityAccount: identityPda,
+          oracle: verificationOracle.publicKey,
+          config: configPda,
+        })
+        .signers([verificationOracle])
+        .rpc();
+
+      const identity = await program.account.identityAccount.fetch(identityPda);
+      expect(identity.verificationBitmap.toNumber()).to.equal(1);
+    });
+
+    it("should reject unauthorized verification updates", async () => {
+      const unauthorizedOracle = Keypair.generate();
+
+      try {
+        await program.methods
+          .updateVerificationStatus(1, true)
+          .accounts({
+            identityAccount: identityPda,
+            oracle: unauthorizedOracle.publicKey,
+            config: configPda,
+          })
+          .signers([unauthorizedOracle])
+          .rpc();
+        expect.fail("Should have thrown an error");
+      } catch (error: any) {
+        expect(error.error.errorCode.code).to.equal("UnauthorizedOracle");
       }
     });
   });
@@ -269,7 +335,7 @@ describe("identity-registry", () => {
           .rpc();
         expect.fail("Should have thrown an error");
       } catch (error: any) {
-        expect(error.error.errorCode.code).to.equal("UnauthorizedRecovery");
+        expect(error.error.errorCode.code).to.equal("ConstraintSeeds");
       }
     });
   });

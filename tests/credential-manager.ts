@@ -160,6 +160,37 @@ describe("credential-manager", () => {
         expect(error.error.errorCode.code).to.equal("SchemaNameTooLong");
       }
     });
+
+    it("should reject transferable identity-derived schemas", async () => {
+      const schemaId = generateId();
+      const [identitySchemaPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("schema"), schemaId],
+        program.programId
+      );
+
+      try {
+        await program.methods
+          .createSchema(
+            Array.from(schemaId),
+            "AadhaarVerification",
+            1,
+            1,
+            true,
+            true
+          )
+          .accounts({
+            config: configPda,
+            schema: identitySchemaPda,
+            creator: schemaCreator.publicKey,
+            systemProgram: SystemProgram.programId,
+          })
+          .signers([schemaCreator])
+          .rpc();
+        expect.fail("Should have thrown an error");
+      } catch (error: any) {
+        expect(error.error.errorCode.code).to.equal("IdentityCredentialTransferNotAllowed");
+      }
+    });
   });
 
   describe("register_issuer", () => {
@@ -365,6 +396,41 @@ describe("credential-manager", () => {
         expect.fail("Should have thrown an error");
       } catch (error: any) {
         expect(error.error.errorCode.code).to.equal("InsufficientIssuerVerification");
+      }
+    });
+
+    it("should reject issuer impersonation during credential issuance", async () => {
+      const impersonator = Keypair.generate();
+      await airdrop(impersonator.publicKey, 1);
+
+      const impersonatedCredId = generateId();
+      const [impersonatedCredPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("credential"), impersonatedCredId],
+        program.programId
+      );
+
+      try {
+        await program.methods
+          .issueCredential(
+            Array.from(impersonatedCredId),
+            Array.from(generateId()),
+            null,
+            "https://example.com/impersonated"
+          )
+          .accounts({
+            config: configPda,
+            schema: schemaPda,
+            issuer: issuerPda,
+            credential: impersonatedCredPda,
+            holder: holder.publicKey,
+            authority: impersonator.publicKey,
+            systemProgram: SystemProgram.programId,
+          })
+          .signers([impersonator])
+          .rpc();
+        expect.fail("Should have thrown an error");
+      } catch (error: any) {
+        expect(error.message).to.include("A seeds constraint was violated");
       }
     });
   });
@@ -678,6 +744,99 @@ describe("credential-manager", () => {
     });
   });
 
+  describe("transfer_credential", () => {
+    let schemaPda: PublicKey;
+    let issuerAuthority: Keypair;
+    let issuerPda: PublicKey;
+    let holder: Keypair;
+    let credentialPda: PublicKey;
+
+    before(async () => {
+      const schemaId = generateId();
+      const schemaCreator = Keypair.generate();
+      await airdrop(schemaCreator.publicKey, 5);
+
+      [schemaPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("schema"), schemaId],
+        program.programId
+      );
+
+      await program.methods
+        .createSchema(Array.from(schemaId), "AadhaarVerification", 1, 1, false, true)
+        .accounts({
+          config: configPda,
+          schema: schemaPda,
+          creator: schemaCreator.publicKey,
+          systemProgram: SystemProgram.programId,
+        })
+        .signers([schemaCreator])
+        .rpc();
+
+      issuerAuthority = Keypair.generate();
+      await airdrop(issuerAuthority.publicKey, 5);
+
+      [issuerPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("issuer"), issuerAuthority.publicKey.toBuffer()],
+        program.programId
+      );
+
+      await program.methods
+        .registerIssuer("Transfer Test Issuer", 2)
+        .accounts({
+          config: configPda,
+          issuer: issuerPda,
+          identity: Keypair.generate().publicKey,
+          authority: issuerAuthority.publicKey,
+          systemProgram: SystemProgram.programId,
+        })
+        .signers([issuerAuthority])
+        .rpc();
+
+      holder = Keypair.generate();
+      await airdrop(holder.publicKey, 1);
+
+      const credentialId = generateId();
+      [credentialPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("credential"), credentialId],
+        program.programId
+      );
+
+      await program.methods
+        .issueCredential(Array.from(credentialId), Array.from(generateId()), null, "https://example.com")
+        .accounts({
+          config: configPda,
+          schema: schemaPda,
+          issuer: issuerPda,
+          credential: credentialPda,
+          holder: holder.publicKey,
+          authority: issuerAuthority.publicKey,
+          systemProgram: SystemProgram.programId,
+        })
+        .signers([issuerAuthority])
+        .rpc();
+    });
+
+    it("should reject transfer of identity-derived credentials", async () => {
+      const newHolder = Keypair.generate();
+
+      try {
+        await program.methods
+          .transferCredential()
+          .accounts({
+            schema: schemaPda,
+            credential: credentialPda,
+            holder: holder.publicKey,
+            newHolder: newHolder.publicKey,
+          })
+          .signers([holder])
+          .rpc();
+        expect.fail("Should have thrown an error");
+      } catch (error: any) {
+        expect(error.error.errorCode.code).to.equal("CredentialNotTransferable");
+      }
+    });
+  });
+
   describe("admin functions", () => {
     let schemaPda: PublicKey;
     let issuerPda: PublicKey;
@@ -790,8 +949,7 @@ describe("credential-manager", () => {
           .rpc();
         expect.fail("Should have thrown an error");
       } catch (error: any) {
-        // Anchor constraint error
-        expect(error.message).to.include("A has_one constraint was violated");
+        expect(error.message).to.include("AnchorError caused by account: config");
       }
     });
   });

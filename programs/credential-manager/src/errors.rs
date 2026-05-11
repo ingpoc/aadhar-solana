@@ -35,6 +35,9 @@ pub enum CredentialError {
     #[msg("Credential is not transferable")]
     CredentialNotTransferable,
 
+    #[msg("Identity-derived credential schemas must be non-transferable")]
+    IdentityCredentialTransferNotAllowed,
+
     #[msg("Credential is not revocable")]
     CredentialNotRevocable,
 

@@ -154,7 +154,7 @@ impl Credential {
         1;   // bump
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, PartialEq, Eq)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, Debug, PartialEq, Eq)]
 pub enum CredentialStatus {
     Active,
     Suspended,

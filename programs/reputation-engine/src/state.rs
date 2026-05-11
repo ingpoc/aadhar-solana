@@ -108,7 +108,7 @@ impl ReputationEvent {
         1;   // bump
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, PartialEq, Eq)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ReputationTier {
     Bronze,    // 0-300
     Silver,    // 301-500
@@ -135,7 +135,7 @@ impl ReputationTier {
     }
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, PartialEq, Eq)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, Debug, PartialEq, Eq)]
 pub enum EventType {
     // Positive events
     VerificationCompleted,      // +50

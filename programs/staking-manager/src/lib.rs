@@ -7,7 +7,7 @@ pub mod errors;
 use state::*;
 use errors::*;
 
-declare_id!("FqSMx8qQqKvpwHHzCvuqQtmKLx4zUqNqmJz7uSxYpGhR");
+declare_id!("GyDkVUfK3u4JzADv8ADw7MyCvn68guX5K1Eo7HVDyZSh");
 
 /// Precision for reward calculations
 const REWARD_PRECISION: u128 = 1_000_000_000_000; // 1e12

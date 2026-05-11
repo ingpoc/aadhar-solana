@@ -6,7 +6,7 @@ pub mod errors;
 use state::*;
 use errors::*;
 
-declare_id!("FoZKx8qQqKvpwHHzCvuqQtmKLx4zUqNqmJz7uSxYpGhS");
+declare_id!("7trw2WbG59rrKKwnCfnFw8mTMNvYpCfpURoVgJYAgTSP");
 
 #[program]
 pub mod credential_manager {
@@ -44,7 +44,14 @@ pub mod credential_manager {
         transferable: bool,
         revocable: bool,
     ) -> Result<()> {
-        require!(name.len() <= CredentialSchema::MAX_NAME_LEN, CredentialError::SchemaNameTooLong);
+        require!(
+            name.len() <= CredentialSchema::MAX_NAME_LEN,
+            CredentialError::SchemaNameTooLong
+        );
+        require!(
+            !transferable || !is_identity_derived_schema(&name),
+            CredentialError::IdentityCredentialTransferNotAllowed
+        );
 
         let config = &mut ctx.accounts.config;
         let schema = &mut ctx.accounts.schema;
@@ -312,6 +319,16 @@ pub mod credential_manager {
 
         Ok(())
     }
+}
+
+fn is_identity_derived_schema(name: &str) -> bool {
+    [
+        credential_types::AADHAAR_VERIFICATION,
+        credential_types::PAN_VERIFICATION,
+        credential_types::BANK_ACCOUNT,
+        credential_types::ADDRESS_PROOF,
+    ]
+    .contains(&name)
 }
 
 // ============== Account Contexts ==============

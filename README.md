@@ -29,7 +29,7 @@ aadhaar-solana/
 - Node.js 18+
 - Rust 1.70+
 - Solana CLI
-- Anchor CLI 0.29.0
+- Anchor CLI 0.31.1
 - PostgreSQL 14+
 - Redis
 

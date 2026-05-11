@@ -34,8 +34,8 @@ anchor build -p identity_registry
 ## Technology Stack
 
 - **Language**: Rust 1.70+
-- **Framework**: Anchor 0.30.1
-- **Solana SDK**: anchor-lang 0.29.0, anchor-spl 0.29.0
+- **Framework**: Anchor 0.31.1
+- **Solana SDK**: anchor-lang 0.31.1, anchor-spl 0.31.1
 - **Testing**: Mocha + ts-mocha (TypeScript tests)
 
 ## Directory Structure

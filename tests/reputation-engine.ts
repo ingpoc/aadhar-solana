@@ -189,7 +189,7 @@ describe("reputation-engine", () => {
           .rpc();
         expect.fail("Should have thrown an error");
       } catch (error: any) {
-        expect(error.message).to.include("A has_one constraint was violated");
+        expect(error.message).to.include("AnchorError caused by account: config");
       }
     });
   });

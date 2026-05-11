@@ -216,6 +216,7 @@ describe("verification-oracle", () => {
     it("should create a verification request", async () => {
       const verificationType = 0; // Aadhaar
       const verificationHash = crypto.randomBytes(32);
+      const feeVaultBalanceBefore = await provider.connection.getBalance(feeVaultPda);
 
       [verificationRequestPda] = PublicKey.findProgramAddressSync(
         [
@@ -246,6 +247,114 @@ describe("verification-oracle", () => {
       expect(request.confirmations).to.equal(0);
       expect(request.rejections).to.equal(0);
       expect(request.result).to.be.null;
+
+      const feeVaultBalanceAfter = await provider.connection.getBalance(feeVaultPda);
+      expect(feeVaultBalanceAfter - feeVaultBalanceBefore).to.equal(VERIFICATION_FEE);
+    });
+
+    it("should accept one oracle response and reject a duplicate response", async () => {
+      const metadataHash = crypto.randomBytes(32);
+      const [oracleResponsePda] = PublicKey.findProgramAddressSync(
+        [
+          Buffer.from("response"),
+          verificationRequestPda.toBuffer(),
+          oracleAuthority.publicKey.toBuffer(),
+        ],
+        program.programId
+      );
+
+      await program.methods
+        .submitVerification(true, Array.from(metadataHash))
+        .accounts({
+          config: configPda,
+          oracleNode: oraclePda,
+          verificationRequest: verificationRequestPda,
+          oracleResponse: oracleResponsePda,
+          authority: oracleAuthority.publicKey,
+          systemProgram: SystemProgram.programId,
+        })
+        .signers([oracleAuthority])
+        .rpc();
+
+      const request = await program.account.verificationRequest.fetch(verificationRequestPda);
+      expect(request.confirmations).to.equal(1);
+      expect(request.respondedOracles.map((key: PublicKey) => key.toString())).to.include(
+        oracleAuthority.publicKey.toString()
+      );
+
+      try {
+        await program.methods
+          .submitVerification(false, Array.from(crypto.randomBytes(32)))
+          .accounts({
+            config: configPda,
+            oracleNode: oraclePda,
+            verificationRequest: verificationRequestPda,
+            oracleResponse: oracleResponsePda,
+            authority: oracleAuthority.publicKey,
+            systemProgram: SystemProgram.programId,
+          })
+          .signers([oracleAuthority])
+          .rpc();
+        expect.fail("Should have thrown an error");
+      } catch (error: any) {
+        expect(error.message).to.include("already in use");
+      }
+    });
+
+    it("should reject an unregistered oracle response", async () => {
+      const unregisteredOracle = Keypair.generate();
+      await provider.connection.confirmTransaction(
+        await provider.connection.requestAirdrop(unregisteredOracle.publicKey, LAMPORTS_PER_SOL)
+      );
+
+      const [unregisteredOraclePda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("oracle"), unregisteredOracle.publicKey.toBuffer()],
+        program.programId
+      );
+      const [oracleResponsePda] = PublicKey.findProgramAddressSync(
+        [
+          Buffer.from("response"),
+          verificationRequestPda.toBuffer(),
+          unregisteredOracle.publicKey.toBuffer(),
+        ],
+        program.programId
+      );
+
+      try {
+        await program.methods
+          .submitVerification(true, Array.from(crypto.randomBytes(32)))
+          .accounts({
+            config: configPda,
+            oracleNode: unregisteredOraclePda,
+            verificationRequest: verificationRequestPda,
+            oracleResponse: oracleResponsePda,
+            authority: unregisteredOracle.publicKey,
+            systemProgram: SystemProgram.programId,
+          })
+          .signers([unregisteredOracle])
+          .rpc();
+        expect.fail("Should have thrown an error");
+      } catch (error: any) {
+        expect(error.message).to.include("AnchorError caused by account: oracle");
+      }
+    });
+
+    it("should slash an oracle and deactivate it after repeated slashing", async () => {
+      for (let index = 0; index < 3; index += 1) {
+        await program.methods
+          .slashOracle({ invalidVerification: {} })
+          .accounts({
+            config: configPda,
+            oracleNode: oraclePda,
+            admin: admin.publicKey,
+          })
+          .signers([admin])
+          .rpc();
+      }
+
+      const oracle = await program.account.oracleNode.fetch(oraclePda);
+      expect(oracle.slashCount).to.equal(3);
+      expect(oracle.status).to.deep.equal({ slashed: {} });
     });
   });
 
