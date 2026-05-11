@@ -1,96 +1,72 @@
-# AadhaarChain - Self-Sovereign Identity Platform
+# aadhar-solana
 
-Revolutionary Solana-based identity platform bridging India's government-grade identity verification with decentralized ownership.
+`aadhar-solana` is the Solana and NestJS identity-layer candidate for AadhaarChain. In the current portfolio it is a migration/bridge target, not the active trust source of truth.
+
+The active local trust producer remains `aadhaar-chain` until the bridge contract, signer/oracle model, credential issuance path, revocation propagation, and downstream read semantics are fully verified.
+
+## Portfolio Role
+
+- Anchor programs for identity registry, verification oracle, credential manager, reputation, and staking.
+- NestJS/API, web, mobile, shared packages, and scripts for the long-term Solana-backed identity layer.
+- Validator-backed testbed for adversarial identity and credential behavior.
+
+Non-goals in the current portfolio state:
+
+- Do not point buyer, seller, FlatWatch, or the shared agent control plane directly at this repo for trust state.
+- Do not store raw Aadhaar, PAN, OCR evidence, or private identity data on-chain.
+- Do not issue transferable credentials for identity-derived schemas such as Aadhaar, PAN, bank-account, or address-proof credentials.
 
 ## Project Structure
 
-```
-aadhaar-solana/
+```text
+aadhar-solana/
 ├── programs/              # Solana programs (Rust/Anchor)
-│   ├── identity-registry/
-│   ├── verification-oracle/
-│   ├── credential-manager/
-│   ├── reputation-engine/
-│   └── staking-manager/
 ├── packages/
-│   ├── api/              # Backend API (NestJS/TypeScript)
-│   ├── web/              # Web frontend (Next.js)
-│   ├── mobile/           # Mobile app (React Native)
-│   └── shared/           # Shared utilities and types
-├── scripts/              # Deployment and utility scripts
-├── tests/                # Integration and E2E tests
-└── .docs/                # Complete documentation
-
+│   ├── api/               # Backend API (NestJS/TypeScript)
+│   ├── web/               # Web frontend (Next.js)
+│   ├── mobile/            # Mobile app (React Native)
+│   └── shared/            # Shared utilities and types
+├── scripts/               # Deployment and utility scripts
+├── tests/                 # Integration and E2E tests
+└── .docs/                 # Project documentation
 ```
 
-## Quick Start
+## Prerequisites
 
-### Prerequisites
 - Node.js 18+
-- Rust 1.70+
+- Yarn
+- Rust
 - Solana CLI
-- Anchor CLI 0.31.1
-- PostgreSQL 14+
+- Anchor CLI `0.31.1`
+- PostgreSQL
 - Redis
 
-### Installation
+## Local Verification
+
+Install dependencies:
 
 ```bash
-# Clone repository
-git clone https://github.com/aadhaarchain/aadhaar-solana.git
-cd aadhaar-solana
+yarn install --frozen-lockfile
+```
 
-# Install dependencies
-yarn install
+Build and test Anchor programs:
 
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your values
-
-# Build Solana programs
+```bash
 yarn anchor:build
-
-# Set up database
-cd packages/api
-npx prisma migrate dev
-cd ../..
-
-# Start development servers
-yarn dev
+yarn anchor:test
 ```
 
-## Development Commands
+The local validator path has been verified with `yarn anchor:test`. Current adversarial coverage includes unauthorized verification updates, issuer impersonation, identity-derived credential transfer misuse, oracle double response, fee-vault payment handling, and oracle slashing/deactivation.
 
-```bash
-# Solana Programs
-yarn anchor:build          # Build all programs
-yarn anchor:test           # Run program tests
-yarn anchor:deploy         # Deploy to devnet
+## Bridge Status
 
-# Backend API
-cd packages/api
-yarn dev                   # Start API server
-yarn test                  # Run tests
+Before this repo can become a trust producer for portfolio apps, the bridge to `aadhaar-chain` must define and verify:
 
-# Web Frontend
-cd packages/web
-yarn dev                   # Start Next.js dev server
+- verification event schema
+- signer/oracle identity
+- downstream attestation format
+- credential issuance path
+- revocation propagation
+- trust read semantics compatible with `TRUST-CONSUMER-CONTRACT.md`
 
-# Mobile App
-cd packages/mobile
-yarn ios                   # Run on iOS
-yarn android               # Run on Android
-```
-
-## Documentation
-
-See [.docs/README.md](.docs/README.md) for complete documentation including:
-- Architecture overview
-- API specifications
-- Smart contract details
-- Security framework
-- Deployment guides
-
-## License
-
-See LICENSE file for details.
+Until then, downstream apps must continue consuming the FastAPI gateway trust contract from `aadhaar-chain`.
