@@ -2,7 +2,9 @@
 
 ## Overview
 
-Production-ready REST API built with NestJS that serves as the application layer between clients and the Solana blockchain. Handles identity management, verification workflows, credential issuance, and reputation scoring.
+Production-ready REST API built with NestJS that serves as the application layer between clients and the Solana blockchain. Handles identity management and verification workflows.
+
+**Portfolio note:** Reputation scoring endpoints are **non-goal / do-not-ship** for the AadhaarChain AgentGuard product (see workspace `PRODUCTIDEA.md` / `aadharchain/GOAL.md`). Keep as legacy inventory only.
 
 ## Quick Commands
 

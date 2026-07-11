@@ -1,5 +1,9 @@
 # CLAUDE.md - Solana Programs (Smart Contracts)
 
+## Portfolio note
+
+This monorepo is a **bridge target**, not the portfolio product. Product goals live in workspace `PRODUCTIDEA.md` and `aadharchain/GOAL.md` (AgentGuard). **Do not ship** `reputation-engine`, transferable credentials, or SSI framing as product surfaces. Treat the program table below as inventory.
+
 ## Overview
 
 This directory contains 5 interconnected Solana programs built with the Anchor framework that form the blockchain layer of AadhaarChain.

@@ -2,21 +2,21 @@
 anchor_version = "0.31.1"
 
 [features]
-seeds = false
+resolution = true
 skip-lint = false
 
 [programs.localnet]
-identity_registry = "9cDgdU4VnziNnBzDbWx7yTEhJsiDk27HbcYwUTmTTF6n"
-verification_oracle = "3zNSrpqKKd7Bdsq1JJeVwPyddt9jCcP6Eg9xMgbZtziY"
-credential_manager = "7trw2WbG59rrKKwnCfnFw8mTMNvYpCfpURoVgJYAgTSP"
-reputation_engine = "27mcyzQMfRAf1Y2z9T9cf4DaViEa6Kqc4czwJM1PPonH"
-staking_manager = "GyDkVUfK3u4JzADv8ADw7MyCvn68guX5K1Eo7HVDyZSh"
+credential_manager = "Fib1drk4v1pTPFxVZbvkuFxEUiZ8vXZNJuRq97YUdaG4"
+identity_registry = "DPW1Ji3XhNb4zAnL9SLq5ZBjmG7ePPegWuocY5VeJLdm"
+reputation_engine = "FF1mjZ7WBhrUVq8SG7D3vNfGoTtE7L8mBLsi4efRNN2k"
+staking_manager = "7s3ftYP22nGWxqvc6mDA1U4tRVdtaBJpACfg7GnSdJXH"
+verification_oracle = "35h6f6txjVcf8UshEaAm8fki2v1nhRLvRHFGNRwnTMrn"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Localnet"
+cluster = "localnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]

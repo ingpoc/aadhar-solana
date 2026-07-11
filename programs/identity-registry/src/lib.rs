@@ -6,7 +6,7 @@ pub mod errors;
 use state::*;
 use errors::*;
 
-declare_id!("9cDgdU4VnziNnBzDbWx7yTEhJsiDk27HbcYwUTmTTF6n");
+declare_id!("DPW1Ji3XhNb4zAnL9SLq5ZBjmG7ePPegWuocY5VeJLdm");
 
 #[program]
 pub mod identity_registry {

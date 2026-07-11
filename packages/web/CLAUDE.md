@@ -4,6 +4,8 @@
 
 Next.js 14 web application for AadhaarChain using the App Router. Provides a web-based interface for identity management, credential verification, and Solana wallet integration. Currently ~30% complete (skeleton/boilerplate stage).
 
+**Portfolio note:** `/reputation` and SSI framing are **non-goal / do-not-ship**. Product owners are workspace `PRODUCTIDEA.md` and `aadharchain/GOAL.md` (AgentGuard).
+
 ## Quick Commands
 
 ```bash

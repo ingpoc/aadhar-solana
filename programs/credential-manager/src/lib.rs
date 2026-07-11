@@ -6,7 +6,7 @@ pub mod errors;
 use state::*;
 use errors::*;
 
-declare_id!("7trw2WbG59rrKKwnCfnFw8mTMNvYpCfpURoVgJYAgTSP");
+declare_id!("Fib1drk4v1pTPFxVZbvkuFxEUiZ8vXZNJuRq97YUdaG4");
 
 #[program]
 pub mod credential_manager {

@@ -7,7 +7,7 @@ pub mod errors;
 use state::*;
 use errors::*;
 
-declare_id!("3zNSrpqKKd7Bdsq1JJeVwPyddt9jCcP6Eg9xMgbZtziY");
+declare_id!("35h6f6txjVcf8UshEaAm8fki2v1nhRLvRHFGNRwnTMrn");
 
 #[program]
 pub mod verification_oracle {

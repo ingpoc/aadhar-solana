@@ -1,8 +1,12 @@
-# CLAUDE.md - AadhaarChain Project Guide
+# CLAUDE.md - aadharsolana (bridge target)
 
 ## Project Overview
 
-AadhaarChain is a production-ready, self-sovereign identity platform that bridges India's government-grade identity verification (Aadhaar/PAN) with blockchain-based decentralized ownership. Built on the Solana blockchain using a monorepo architecture.
+`aadharsolana` is the **optional Solana/Anchor bridge** for the portfolio — not the product source of truth and not a self-sovereign identity (SSI) platform to ship.
+
+Portfolio product: AadhaarChain trust substrate + **AgentGuard** (see workspace `PRODUCTIDEA.md` and `aadharchain/GOAL.md`). On-chain work here may later hold PII-free commitments, revocation, and action receipts. **Non-goals:** universal reputation scores, transferable identity tokens, land title tokenization, “Aadhaar on blockchain.”
+
+Treat reputation / credential-manager programs as legacy inventory — do not ship them as product surfaces until AgentGuard control-plane design explicitly needs them.
 
 ## Quick Reference
 
